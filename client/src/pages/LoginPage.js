@@ -38,12 +38,15 @@ export default function SignUpPage() {
           </button>
           <p className="text-xs text-center mt-2">
             Don't have an Account?{" "}
-            <Link className="font-semibold">
+            <Link to="/signup" className="font-semibold">
               <u>Register Here</u>
             </Link>
           </p>
 
-          <Link className="absolute right-0 bottom-0 mr-20 mb-20 text-sm flex items-center">
+          <Link
+            to="/"
+            className="absolute right-0 bottom-0 mr-20 mb-20 text-sm flex items-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
