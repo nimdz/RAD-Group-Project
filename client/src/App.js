@@ -1,10 +1,16 @@
-import RegistrationPage from "./components/RegisterationPage";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
+import { UserContextProvider } from "./components/UserContext";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <RegistrationPage />
-    </div>
+    <UserContextProvider>
+      <Routes>
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </UserContextProvider>
   );
 }
 
