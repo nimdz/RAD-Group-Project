@@ -1,4 +1,4 @@
-import BG from "../assets/images/signupbg.jpg";
+import BG from "../assets/images/signinbg.jpg";
 import { Link } from "react-router-dom";
 
 export default function SignUpPage() {
