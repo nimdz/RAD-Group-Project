@@ -37,7 +37,7 @@ export default function NavBar() {
         <Link to="/signup" className="mr-4 text-white">
           Register
         </Link>
-        <button className="bg-secondary_500 px-4 py-1 rounded-xl text-white">
+        <button className="bg-secondary_500 px-4 py-1 rounded-lg text-white">
           <Link to="/login">Sign In</Link>
         </button>
       </div>
