@@ -8,7 +8,7 @@ export default function CheckOutBar() {
             <label className="text-sm font-semibold">Location</label>
             <input
               type="text"
-              className="text-sm py-1"
+              className="text-sm py-1 "
               placeholder="Where are you staying?"
             />
           </div>
@@ -16,19 +16,19 @@ export default function CheckOutBar() {
             <label className="text-sm font-semibold">Check In</label>
             <input
               type="date"
-              className="text-sm text-gray-400"
+              className="text-sm text-gray-400 py-1"
               value="Add date"
             />
           </div>
           <div className="border-r ml-2">
             <label className="text-sm font-semibold">Check Out</label>
-            <input type="date" className="text-sm text-gray-400" />
+            <input type="date" className="text-sm text-gray-400 py-1" />
           </div>
           <div className="border-r ml-2">
             <label className="text-sm font-semibold">Guests</label>
             <input
               type="number"
-              className="text-sm"
+              className="text-sm py-1"
               placeholder="Number of guests"
             />
           </div>
