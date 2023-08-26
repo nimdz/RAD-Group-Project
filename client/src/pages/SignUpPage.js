@@ -16,6 +16,8 @@ export default function SignUpPage() {
   const [termsError, setTermsError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [emailAvailable, setEmailAvailable] = useState(true);
+  const [userType, setUserType] = useState("");
+  const [userTypeError, setUserTypeError] = useState("");
 
   const handleFullNameChange = (event) => {
     const value = event.target.value;
@@ -66,6 +68,12 @@ export default function SignUpPage() {
     }
   };
 
+  const handleUserTypeChange = (event) => {
+    const value = event.target.value;
+    setUserType(value);
+    setUserTypeError("");
+  };
+
   const handleTermsChange = (event) => {
     const value = event.target.checked;
     setAgreeToTerms(value);
@@ -90,6 +98,11 @@ export default function SignUpPage() {
       return;
     }
 
+    if (!userType) {
+      setUserTypeError("Please select a user type.");
+      return;
+    }
+
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     if (!password.match(passwordRegex)) {
@@ -100,7 +113,6 @@ export default function SignUpPage() {
     }
 
     try {
-      // Check email availability
       const emailCheckResponse = await axios.post("/check-email", { email });
       if (!emailCheckResponse.data.available) {
         setEmailAvailable(false);
@@ -112,15 +124,14 @@ export default function SignUpPage() {
         fullName,
         email,
         password,
+        userType,
       });
 
-      // Clear previous error messages and set success message
       setTermsError("");
       setFullNameError("");
       setPasswordError("");
       setSuccessMessage("Sign up successful! You can now log in.");
 
-      // Clear input fields
       setFullName("");
       setEmail("");
       setPassword("");
@@ -129,7 +140,6 @@ export default function SignUpPage() {
 
       console.log(response.data);
     } catch (error) {
-      // Handle error (e.g., show error message)
       console.error("Sign up failed:", error);
     }
   };
@@ -178,6 +188,42 @@ export default function SignUpPage() {
           {confirmPasswordError && (
             <p className="text-red-500 text-xs">{confirmPasswordError}</p>
           )}
+          <div className="flex flex-col items-start mt-4">
+            <label className="text-xs text-primary_700 mb-1">
+              Select User Type:
+            </label>
+            <div>
+              <input
+                type="radio"
+                id="customer"
+                value="customer"
+                checked={userType === "customer"}
+                onChange={handleUserTypeChange}
+              />
+              <label
+                htmlFor="customer"
+                className="ml-1 mr-4 text-xs text-primary_700"
+              >
+                Customer
+              </label>
+              <input
+                type="radio"
+                id="hotelOwner"
+                value="hotelOwner"
+                checked={userType === "hotelOwner"}
+                onChange={handleUserTypeChange}
+              />
+              <label
+                htmlFor="hotelOwner"
+                className="ml-1 text-xs text-primary_700"
+              >
+                Hotel Owner
+              </label>
+            </div>
+          </div>
+          {userTypeError && (
+            <p className="text-red-500 text-xs">{userTypeError}</p>
+          )}
           <input
             type="checkbox"
             id="terms"
@@ -204,7 +250,6 @@ export default function SignUpPage() {
               <u>Login Here</u>
             </Link>
           </p>
-
           <Link
             to="/"
             className="absolute right-0 bottom-0 mr-20 mb-20 text-sm flex items-center"
