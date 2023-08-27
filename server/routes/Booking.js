@@ -33,7 +33,7 @@ router.route("/").get((req, res) => {
 });
 
 router.route("/update/:id").put(async (req, res) => {
-  let userId = req.params.id;
+  let bookingId = req.params.id;
   const{place,checkIn,checkOut,noofPeople,phoneNo}=req.body;
 
   const updateBooking={
@@ -56,7 +56,7 @@ router.route("/update/:id").put(async (req, res) => {
 });
 
 router.route("/delete/:id").delete(async (req, res) => {
-  let userId = req.params.id;
+  let bookingId = req.params.id;
 
   await Booking.findByIdAndDelete(userId)
     .then(() => {
@@ -71,7 +71,7 @@ router.route("/delete/:id").delete(async (req, res) => {
 });
 
 router.route("/get/:id").get(async (req, res) => {
-  let userId = req.params.id;
+  let bookingId = req.params.id;
   const booking = await Booking.findById(userId)
     .then(() => {
       res.status(200).send({ status: "Booking Data Fetched", booking:booking });
