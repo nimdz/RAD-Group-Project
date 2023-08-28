@@ -28,7 +28,9 @@ export default function NavBar() {
     >
       <img src={Logo} className="h-[50px] " alt="logo" />
       <div>
-        <Link className="mr-4 2xl:mr-8 text-white">Home</Link>
+        <Link className="mr-4 2xl:mr-8 text-white" to="/">
+          Home
+        </Link>
         <Link className="mr-4 2xl:mr-8 text-white">Hotels</Link>
         <Link className="mr-4 2xl:mr-8 text-white">Services</Link>
         <Link className="mr-4 2xl:mr-8 text-white">Contact Us</Link>
