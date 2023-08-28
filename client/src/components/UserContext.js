@@ -10,7 +10,7 @@ export function UserContextProvider({ children }) {
 
   useEffect(() => {
     if (!user) {
-      axios.get("/profile").then(({ data }) => {
+      axios.get("/").then(({ data }) => {
         setUser(data);
         //setReady(true);
       });
