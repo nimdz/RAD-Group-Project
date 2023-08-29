@@ -48,7 +48,6 @@ export default function NavBar() {
         <Link className="mr-4 2xl:mr-8 text-white">Contact Us</Link>
       </div>
       <div>
-        {/* Check if the user is logged in */}
         {user ? (
           <div className="flex items-center">
             <Link className="text-white mr-4" to="/profile">
@@ -60,7 +59,6 @@ export default function NavBar() {
             >
               Logout
             </button>
-            {/* Render a logout button here */}
           </div>
         ) : (
           <div>

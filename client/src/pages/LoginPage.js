@@ -47,10 +47,18 @@ export default function SignInPage() {
       setSignInError("");
       setSignInSuccess("Sign in successful!");
 
-      setUser(response.data);
+      console.log(response);
+      const userData = {
+        token: response.data.token,
+        userType: response.data.userType,
+        userName: response.data.userName,
+      };
+
+      setUser(userData);
+      console.log(userData);
+      localStorage.setItem("userToken", response.data.token);
 
       navigate("/");
-      console.log(response.data);
     } catch (error) {
       // Handle error (e.g., show error message)
       if (error.response && error.response.data) {

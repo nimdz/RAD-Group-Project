@@ -100,9 +100,11 @@ app.post("/signin", async (req, res) => {
       expiresIn: "1h",
     });
 
+    console.log(user.userType);
     res.status(200).json({
       message: "Sign in successful.",
       token: token,
+      userType: user.userType,
       userName: user.fullName,
     });
   } catch (error) {
@@ -116,7 +118,7 @@ app.get("/profile", (req, res) => {
     jwt.verify(token, secretKey, {}, async (err, userData) => {
       if (err) throw err;
       const { fullName, email, _id } = await User.findById(userData.userId);
-      res.json({ fullName, email, _id });
+      res.json({ fullName, email, userType, _id });
     });
   } else {
     res.json(null);
