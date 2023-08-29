@@ -45,7 +45,7 @@ router.route("/update/:id").put(async (req, res) => {
     
   };
 
-  const update = await Booking.findByIdAndUpdate(userId,updateBooking)
+  const update = await Booking.findByIdAndUpdate(bookingId,updateBooking)
     .then(() => {
       res.status(200).send({ status: "Booking Updated" });
     })
@@ -58,7 +58,7 @@ router.route("/update/:id").put(async (req, res) => {
 router.route("/delete/:id").delete(async (req, res) => {
   let bookingId = req.params.id;
 
-  await Booking.findByIdAndDelete(userId)
+  await Booking.findByIdAndDelete(bookingId)
     .then(() => {
       res.status(200).send({ status: "Booking Data Deleted" });
     })
@@ -72,15 +72,16 @@ router.route("/delete/:id").delete(async (req, res) => {
 
 router.route("/get/:id").get(async (req, res) => {
   let bookingId = req.params.id;
-  const booking = await Booking.findById(userId)
-    .then(() => {
-      res.status(200).send({ status: "Booking Data Fetched", booking:booking });
-    })
-    .catch(() => {
-      console.log(err.message);
-      res
-        .status(500)
-        .send({ status: "Error with fetching data", error: err.message });
-    });
+  try {
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).send({ status: "Booking not found" });
+    }
+    res.status(200).send({ status: "Booking Data Fetched", booking: booking });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send({ status: "Error with fetching data", error: err.message });
+  }
 });
+
 module.exports = router;
