@@ -125,6 +125,9 @@ app.get("/profile", (req, res) => {
   }
 });
 
+const bookingRouter=require("./routes/Booking.js");
+app.use("/booking",bookingRouter);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
