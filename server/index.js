@@ -44,15 +44,12 @@ app.get("/test", (req, res) => {
   res.send("Hello World!");
 });
 
-// Sign-up Endpoint
 app.post("/signup", async (req, res) => {
   try {
     const { fullName, email, password, userType } = req.body;
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user with hashed password
     const newUser = new User({
       fullName,
       email,
@@ -60,7 +57,6 @@ app.post("/signup", async (req, res) => {
       userType,
     });
 
-    // Save the user to the database
     await newUser.save();
 
     res.status(201).json({ message: "User registered successfully!" });
@@ -75,14 +71,11 @@ app.post("/check-email", async (req, res) => {
   try {
     const { email } = req.body;
 
-    // Check if the email already exists in the database
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      // Email already in use
       return res.json({ available: false });
     }
 
-    // Email is available
     res.json({ available: true });
   } catch (error) {
     res.status(500).json({ error: "An error occurred while checking email." });
@@ -93,31 +86,42 @@ app.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if the email exists in the database
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Check if the password matches using bcrypt
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    console.log(isPasswordCorrect);
     if (!isPasswordCorrect) {
       return res.status(401).json({ message: "Incorrect password." });
     }
 
-    // Generate JWT token
     const token = jwt.sign({ userId: user._id }, secretKey, {
       expiresIn: "1h",
     });
 
+    console.log(user.userType);
     res.status(200).json({
       message: "Sign in successful.",
       token: token,
+      userType: user.userType,
       userName: user.fullName,
     });
   } catch (error) {
     res.status(500).json({ error: "An error occurred while signing in." });
+  }
+});
+
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    jwt.verify(token, secretKey, {}, async (err, userData) => {
+      if (err) throw err;
+      const { fullName, email, _id } = await User.findById(userData.userId);
+      res.json({ fullName, email, userType, _id });
+    });
+  } else {
+    res.json(null);
   }
 });
 

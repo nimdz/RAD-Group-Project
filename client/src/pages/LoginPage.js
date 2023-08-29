@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import BG from "../assets/images/signinbg.jpg";
-import { Link } from "react-router-dom";
+import { UserContext } from "../components/UserContext";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,9 @@ export default function SignInPage() {
   const [passwordError, setPasswordError] = useState("");
   const [signInError, setSignInError] = useState("");
   const [signInSuccess, setSignInSuccess] = useState("");
+  const { setUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     const value = event.target.value;
@@ -43,7 +47,18 @@ export default function SignInPage() {
       setSignInError("");
       setSignInSuccess("Sign in successful!");
 
-      console.log(response.data);
+      console.log(response);
+      const userData = {
+        token: response.data.token,
+        userType: response.data.userType,
+        userName: response.data.userName,
+      };
+
+      setUser(userData);
+      console.log(userData);
+      localStorage.setItem("userToken", response.data.token);
+
+      navigate("/");
     } catch (error) {
       // Handle error (e.g., show error message)
       if (error.response && error.response.data) {

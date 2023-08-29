@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import { UserContextProvider } from "./components/UserContext";
 import { Routes, Route } from "react-router-dom";
 import axios from "axios";
+import ProfilePage from "./pages/ProfilePage";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </UserContextProvider>
   );
