@@ -51,11 +51,11 @@ export default function SignInPage() {
       const userData = {
         token: response.data.token,
         userType: response.data.userType,
+        email: response.data.email,
         userName: response.data.userName,
       };
 
       setUser(userData);
-      console.log(userData);
       localStorage.setItem("userToken", response.data.token);
 
       navigate("/");

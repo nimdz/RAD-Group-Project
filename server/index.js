@@ -100,11 +100,11 @@ app.post("/signin", async (req, res) => {
       expiresIn: "1h",
     });
 
-    console.log(user.userType);
     res.status(200).json({
       message: "Sign in successful.",
       token: token,
       userType: user.userType,
+      email: user.email,
       userName: user.fullName,
     });
   } catch (error) {
@@ -125,8 +125,41 @@ app.get("/profile", (req, res) => {
   }
 });
 
-const bookingRouter=require("./routes/Booking.js");
-app.use("/booking",bookingRouter);
+app.get("/api-users", async (req, res) => {
+  try {
+    const users = await User.find({}, "_id fullName email userType"); // Modify this to fetch the desired fields
+
+    res.status(200).json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+app.delete("/api-users/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    await User.findOneAndDelete({ email }); // Find and delete user by email
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while deleting user." });
+  }
+});
+
+app.put("/api-users/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const updatedData = req.body;
+
+    await User.findOneAndUpdate({ email }, updatedData);
+    res.status(200).json({ message: "User data updated successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating user data." });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
