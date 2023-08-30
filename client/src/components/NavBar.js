@@ -1,11 +1,13 @@
 import Logo from "../assets/Logo_1.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "./UserContext"; // Import UserContext
 
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, setUser } = useContext(UserContext); // Get the user object from the context
+
+  const navigate = useNavigate();
 
   const handleScroll = () => {
     if (window.scrollY > 0) {
@@ -23,6 +25,8 @@ export default function NavBar() {
     // Optionally, navigate to the home page or another appropriate page
     // For example, if you're using react-router-dom:
     // history.push("/");
+    localStorage.setItem("userToken", "");
+    navigate("/");
   };
 
   useEffect(() => {
