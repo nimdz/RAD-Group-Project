@@ -42,7 +42,9 @@ export default function NavBar() {
         isScrolled ? "bg-primary_400" : "bg-transparent"
       }`}
     >
-      <img src={Logo} className="h-[50px] " alt="logo" />
+      <Link to="/">
+        <img src={Logo} className="h-[50px] " alt="logo" />
+      </Link>
       <div>
         <Link className="mr-4 2xl:mr-8 text-white" to="/">
           Home

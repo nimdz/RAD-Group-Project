@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 
 import { UserContext } from "../components/UserContext";
 import axios from "axios";
@@ -25,9 +25,9 @@ export default function UserData() {
   };
 
   return (
-    <div className="container mx-auto py-8">
-      <h2 className="text-2xl font-semibold mb-4">User Data</h2>
-      <div className="mb-4">
+    <div className="container mx-auto py-8 w-full">
+      <h2 className="text-2xl text-center font-semibold mb-4">User Data</h2>
+      <div className="mb-4 text-center">
         <p>Name: {user.userName}</p>
         <p>Email: {user.email}</p>
         {/* Display other user details here */}
