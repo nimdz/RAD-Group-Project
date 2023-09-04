@@ -3,12 +3,19 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const imageDownloader = require("image-downloader");
+const fs = require("fs");
+const cookieParser = require("cookie-parser");
+
+const multer = require("multer");
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 4000;
 const User = require("./models/user");
-const secretKey = process.env.JWT_SECRET_KEY;
+const Accommodation = require("./models/accommodation");
+
+const jwtSecret = process.env.JWT_SECRET_KEY;
 
 const mongoose = require("mongoose");
 
@@ -30,15 +37,16 @@ db.on("error", (error) => {
   console.error("Database connection error:", error);
 });
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(
   cors({
     origin: "http://localhost:3000",
     credentials: true,
   })
 );
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.get("/test", (req, res) => {
   res.send("Hello World!");
@@ -96,7 +104,7 @@ app.post("/signin", async (req, res) => {
       return res.status(401).json({ message: "Incorrect password." });
     }
 
-    const token = jwt.sign({ userId: user._id }, secretKey, {
+    const token = jwt.sign({ userId: user._id }, jwtSecret, {
       expiresIn: "1h",
     });
 
@@ -114,15 +122,41 @@ app.post("/signin", async (req, res) => {
 
 app.get("/profile", (req, res) => {
   const { token } = req.cookies;
-  if (token) {
-    jwt.verify(token, secretKey, {}, async (err, userData) => {
-      if (err) throw err;
-      const { fullName, email, _id } = await User.findById(userData.userId);
-      res.json({ fullName, email, userType, _id });
-    });
-  } else {
-    res.json(null);
+
+  if (!token) {
+    return res.json(null); // Return null if there's no token
   }
+
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) {
+      console.error("Token verification error:", err);
+
+      // Clear the token and send a response indicating logout
+      res.clearCookie("token");
+      return res
+        .status(401)
+        .json({ message: "Logged out due to token expiration." });
+    }
+
+    try {
+      const user = await User.findById(userData.userId); // Use "userId" as it's the field set during token signing
+
+      if (!user) {
+        console.error("User not found:", userData.userId);
+
+        // Clear the token and send a response indicating logout
+        res.clearCookie("token");
+        return res.status(401).json({ message: "User not found." });
+      }
+
+      res.json({ name: user.fullName, email: user.email, _id: user._id });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching user data." });
+    }
+  });
 });
 
 app.get("/api-users", async (req, res) => {
@@ -159,6 +193,85 @@ app.put("/api-users/:email", async (req, res) => {
       .status(500)
       .json({ error: "An error occurred while updating user data." });
   }
+});
+
+app.post("/upload-by-link", async (req, res) => {
+  const { link } = req.body;
+
+  const newName = "photo" + Date.now() + ".jpg";
+  await imageDownloader.image({
+    url: link,
+    dest: __dirname + "/uploads/" + newName,
+  });
+
+  res.json(newName);
+});
+
+const photosMiddleware = multer({ dest: "uploads" });
+app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
+  const uploadedFiles = [];
+  for (let i = 0; i < req.files.length; i++) {
+    const { path, originalname } = req.files[i];
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
+
+    fs.renameSync(path, newPath);
+    uploadedFiles.push(newPath.replace("uploads\\", ""));
+  }
+
+  res.json(uploadedFiles);
+});
+
+app.post("/accommodation", async (req, res) => {
+  try {
+    const userId = getUserIdFromToken(req); // Extract user ID from token
+    const newAccommodation = new Accommodation({
+      ...req.body,
+      owner: userId, // Associate the user ID with the accommodation
+    });
+    const savedAccommodation = await newAccommodation.save();
+    res.status(201).json(savedAccommodation);
+  } catch (error) {
+    res.status(400).json({ error: "Error creating accommodation" });
+  }
+});
+
+app.put("/accommodation", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = getUserIdFromToken(req); // Extract user ID from token
+    const updatedAccommodation = await Accommodation.findOneAndUpdate(
+      { _id: id, owner: userId }, // Make sure the user owns the accommodation before updating
+      req.body,
+      { new: true }
+    );
+    if (!updatedAccommodation) {
+      return res.status(404).json({ error: "Accommodation not found" });
+    }
+    res.status(200).json(updatedAccommodation);
+  } catch (error) {
+    res.status(400).json({ error: "Error updating accommodation" });
+  }
+});
+
+app.get("/user-places", async (req, res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const { id } = userData;
+    res.json(await Accommodation.find({ owner: id }));
+  });
+});
+
+app.get("/accommodation/:id", async (req, res) => {
+  const { id } = req.params;
+
+  res.json(await Accommodation.findById(id));
+});
+
+app.get("/accommodation", async (req, res) => {
+  res.json(await Accommodation.find());
 });
 
 app.listen(port, () => {

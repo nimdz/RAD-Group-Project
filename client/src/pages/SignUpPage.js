@@ -233,7 +233,7 @@ export default function SignUpPage() {
           />
           <label htmlFor="terms" className="text-xs ml-1 text-primary_700">
             I agree to the{" "}
-            <Link href="/" className="font-semibold">
+            <Link to="/terms" className="font-semibold">
               Terms of Service
             </Link>
           </label>
