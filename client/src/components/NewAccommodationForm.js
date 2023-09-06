@@ -25,7 +25,7 @@ export default function NewAccommodationForm() {
     if (!id) {
       return;
     }
-    axios.get("/accommodation/" + id).then((response) => {
+    axios.get("/accommodations/" + id).then((response) => {
       const { data } = response;
       setTitle(data.title);
       setAddress(data.address);
@@ -72,13 +72,13 @@ export default function NewAccommodationForm() {
     };
 
     if (id) {
-      await axios.put("/accommodation", {
+      await axios.put("/accommodations", {
         id,
         ...placeDetails,
       });
       setRedirect(true);
     } else {
-      await axios.post("/accommodation", {
+      await axios.post("/accommodations", {
         ...placeDetails,
       });
       setRedirect(true);

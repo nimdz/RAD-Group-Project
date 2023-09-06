@@ -18,13 +18,7 @@ export default function NavBar() {
   };
 
   const handleLogout = () => {
-    // Clear the user data from the context and perform any additional logout tasks
     setUser(null);
-    // You might want to add an API call to logout on the server side as well
-
-    // Optionally, navigate to the home page or another appropriate page
-    // For example, if you're using react-router-dom:
-    // history.push("/");
     localStorage.setItem("userToken", "");
     navigate("/");
   };
