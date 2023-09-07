@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link,navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function AddBooking() {
   const [place, setPlace] = useState("");
@@ -9,7 +9,7 @@ export default function AddBooking() {
   const [noofPeople, setNoofPeople] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
 
-  const navigate = useNavigate();
+  
 
   function sendData(e) {
     e.preventDefault();
@@ -23,7 +23,7 @@ export default function AddBooking() {
 
     axios.post("http://localhost:4000/booking/add", newBooking)
       .then(() => {
-        alert("Booking Added");
+       window.alert("Booking Added");
         // Clear the form fields after successful submission
         setPlace("");
         setCheckIn("");
@@ -112,7 +112,7 @@ export default function AddBooking() {
         type="submit"
         className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
         >
-        Submit
+        Create Booking
       </button>
       <Link
             to="/profile"
@@ -138,3 +138,5 @@ export default function AddBooking() {
       </div>
   );
 }
+
+
