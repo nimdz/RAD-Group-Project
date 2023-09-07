@@ -1,5 +1,8 @@
 const router = require("express").Router();
+const jwt = require("jsonwebtoken");
+const secretKey = "AABSCFGHEJISJODUasdiu";
 let Booking = require("../models/bookings");
+const mongoose = require("mongoose"); 
 
 router.route("/add").post((req, res) => {
   
@@ -33,26 +36,17 @@ router.route("/").get((req, res) => {
 });
 
 router.route("/update/:id").put(async (req, res) => {
-  let bookingId = req.params.id;
-  const{place,checkIn,checkOut,noofPeople,phoneNo}=req.body;
+  const bookingId = req.params.id;
+  const updateBooking = req.body;
 
-  const updateBooking={
-    place,
-    checkIn,
-    checkOut,
-    noofPeople,
-    phoneNo
-    
-  };
-
-  const update = await Booking.findByIdAndUpdate(bookingId,updateBooking)
-    .then(() => {
-      res.status(200).send({ status: "Booking Updated" });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({ status: "Error with updating data" });
-    });
+  try {
+    // Update the booking by ID
+    await Booking.findByIdAndUpdate(bookingId, updateBooking);
+    res.status(200).json({ status: "Booking updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "Error with updating data" });
+  }
 });
 
 router.route("/delete/:id").delete(async (req, res) => {
@@ -70,18 +64,5 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
-router.route("/get/:id").get(async (req, res) => {
-  let bookingId = req.params.id;
-  try {
-    const booking = await Booking.findById(bookingId);
-    if (!booking) {
-      return res.status(404).send({ status: "Booking not found" });
-    }
-    res.status(200).send({ status: "Booking Data Fetched", booking: booking });
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send({ status: "Error with fetching data", error: err.message });
-  }
-});
 
 module.exports = router;
