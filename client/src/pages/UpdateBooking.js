@@ -14,7 +14,7 @@ export default function UpdateBooking() {
 
   useEffect(() => {
     // Fetch booking details by ID and populate the form
-    axios.get(`http://localhost:4000/booking/${id}`)
+    axios.get(`http://localhost:4000/booking/update/${id}`)
       .then((response) => {
         const bookingData = response.data;
         setPlace(bookingData.place);
@@ -39,7 +39,7 @@ export default function UpdateBooking() {
     };
 
     // Make a PUT request to update the booking
-    axios.put(`http://localhost:4000/booking/${id}`, updatedBooking)
+    axios.put(`http://localhost:4000/booking/update/${id}`, updatedBooking)
       .then(() => {
         alert("Booking Updated");
         navigate("/profile"); // Redirect to the profile page after updating
@@ -131,33 +131,39 @@ export default function UpdateBooking() {
           required
         />
       </div>
-      <button 
-        type="submit"
-        className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
-        >
-        Save Changes
-      </button>
-      <Link
-            to="/profile"
-            className="absolute right-0 bottom-0 mr-20 mb-20 text-sm flex items-center"
+
+
+  
+   
+        <div className="form-group">
+          <button
+            type="submit"
+            className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-3 h-3 mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-              />
-            </svg>
-            Back to Profile Page
-            </Link>
+            Save Changes
+          </button>
+        </div>
       </form>
+      <Link
+        to="/booking"
+        className="absolute right-0 bottom-0 mr-100 mb-20 text-sm flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-3 h-3 mr-2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+          />
+        </svg>
+        Back to Booking Page
+      </Link>
     </div>
   );
 }
