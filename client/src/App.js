@@ -10,6 +10,9 @@ import axios from "axios";
 import ProfilePage from "./pages/ProfilePage";
 import Accommodation from "./components/Accommodation";
 import NewAccommodation from "./components/NewAccommodationForm";
+import GetBooking from "./pages/GetBooking";
+import AddBooking from "./pages/AddBooking";
+import UpdateBooking from "./pages/UpdateBooking";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
@@ -31,6 +34,9 @@ function App() {
           path="/profile/accommodation/new"
           element={<NewAccommodation />}
         />
+        <Route path="/booking" element={<GetBooking />} />
+        <Route path="/booking/add" element={<AddBooking />} /> 
+        <Route path="/booking/update" element={<UpdateBooking />} />
       </Routes>
     </UserContextProvider>
   );
