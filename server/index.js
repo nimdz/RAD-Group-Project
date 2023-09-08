@@ -104,9 +104,7 @@ app.post("/signin", async (req, res) => {
       return res.status(401).json({ message: "Incorrect password." });
     }
 
-    const token = jwt.sign({ userId: user._id }, jwtSecret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ userId: user._id }, jwtSecret, {});
 
     res.status(200).json({
       message: "Sign in successful.",
@@ -223,37 +221,76 @@ app.post("/upload", photosMiddleware.array("photos", 100), (req, res) => {
   res.json(uploadedFiles);
 });
 
-app.post("/accommodation", async (req, res) => {
+// ... (Your existing code)
+
+// Route for creating a new accommodation
+app.post("/accommodations", async (req, res) => {
   try {
-    const userId = getUserIdFromToken(req); // Extract user ID from token
-    const newAccommodation = new Accommodation({
-      ...req.body,
-      owner: userId, // Associate the user ID with the accommodation
+    const { placeDetails } = req.body; // Extract user email
+
+    const email = placeDetails.email;
+
+    const user = await User.findOne({ email }); // Find the user by email
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    await Accommodation.create({
+      email: user.email,
+      title: placeDetails.title,
+      address: placeDetails.address,
+      photos: placeDetails.addedPhotos,
+      description: placeDetails.description,
+      perks: placeDetails.perks,
+      extraInfo: placeDetails.extraInfo,
+      checkIn: placeDetails.checkIn,
+      checkOut: placeDetails.checkOut,
+      maxGuests: placeDetails.maxGuests,
+      price: placeDetails.price, // Spread the rest of the accommodation data
     });
-    const savedAccommodation = await newAccommodation.save();
-    res.status(201).json(savedAccommodation);
+
+    res.status(201).json({ message: "Accommodation added successfully." });
   } catch (error) {
-    res.status(400).json({ error: "Error creating accommodation" });
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding accommodation." });
   }
 });
 
-app.put("/accommodation", async (req, res) => {
+// Route for updating an existing accommodation
+app.put("/accommodations/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = getUserIdFromToken(req); // Extract user ID from token
+    const { email, ...updatedAccommodationData } = req.body; // Extract user email
+    const user = await User.findOne({ email }); // Find the user by email
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // Find and update the existing accommodation based on its ID and the user's ID
     const updatedAccommodation = await Accommodation.findOneAndUpdate(
-      { _id: id, owner: userId }, // Make sure the user owns the accommodation before updating
-      req.body,
+      { _id: id, owner: user._id }, // Make sure the user owns the accommodation before updating
+      updatedAccommodationData, // Use the updated accommodation data
       { new: true }
     );
+
     if (!updatedAccommodation) {
-      return res.status(404).json({ error: "Accommodation not found" });
+      return res.status(404).json({ error: "Accommodation not found." });
     }
-    res.status(200).json(updatedAccommodation);
+
+    res.status(200).json({ message: "Accommodation updated successfully." });
   } catch (error) {
-    res.status(400).json({ error: "Error updating accommodation" });
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating accommodation." });
   }
 });
+
+// ... (Rest of your code)
 
 app.get("/user-places", async (req, res) => {
   const { token } = req.cookies;

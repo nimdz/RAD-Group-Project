@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const accommodationSchema = new mongoose.Schema({
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  email: String,
   title: String,
   address: String,
   photos: [String],

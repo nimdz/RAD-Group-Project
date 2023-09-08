@@ -1,14 +1,17 @@
 import Perks from "../components/Perks";
 import PhotosUploader from "../components/PhotosUploader";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ProfileNavBar from "./ProfileNavBar";
 import NavBar from "./NavBar";
 import BG from "../assets/images/profilebg.jpg";
+import { UserContext } from "./UserContext";
 
 export default function NewAccommodationForm() {
   const { id } = useParams();
+  const { user } = useContext(UserContext);
+  const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -22,11 +25,9 @@ export default function NewAccommodationForm() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    if (!id) {
-      return;
-    }
-    axios.get("/accommodation/" + id).then((response) => {
+    axios.get("/accommodations/" + id).then((response) => {
       const { data } = response;
+      setEmail(data.email);
       setTitle(data.title);
       setAddress(data.address);
       setAddedPhotos(data.photos);
@@ -38,7 +39,7 @@ export default function NewAccommodationForm() {
       setMaxGuests(data.maxGuests);
       setPrice(data.price);
     });
-  }, [id]);
+  }, []);
 
   function inputHeader(text) {
     return <h2 className="text-2xl mt-4">{text}</h2>;
@@ -59,6 +60,7 @@ export default function NewAccommodationForm() {
     e.preventDefault();
 
     const placeDetails = {
+      email: user.email,
       title,
       address,
       addedPhotos,
@@ -71,18 +73,10 @@ export default function NewAccommodationForm() {
       price,
     };
 
-    if (id) {
-      await axios.put("/accommodation", {
-        id,
-        ...placeDetails,
-      });
-      setRedirect(true);
-    } else {
-      await axios.post("/accommodation", {
-        ...placeDetails,
-      });
-      setRedirect(true);
-    }
+    await axios.post("/accommodations", {
+      placeDetails,
+    });
+    setRedirect(true);
   }
 
   if (redirect) {
