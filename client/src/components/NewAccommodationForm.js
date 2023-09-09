@@ -79,6 +79,33 @@ export default function NewAccommodationForm() {
     setRedirect(true);
   }
 
+  async function updatePlace(e) {
+    e.preventDefault();
+
+    const placeDetails = {
+      email: user.email,
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+      price,
+    };
+
+    try {
+      await axios.put(`/accommodations/${id}`, {
+        placeDetails,
+      });
+      setRedirect(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   if (redirect) {
     return <Navigate to={"../profile/accommodation"} />;
   }

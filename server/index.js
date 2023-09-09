@@ -262,24 +262,29 @@ app.post("/accommodations", async (req, res) => {
 // Route for updating an existing accommodation
 app.put("/accommodations/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    const { email, ...updatedAccommodationData } = req.body; // Extract user email
-    const user = await User.findOne({ email }); // Find the user by email
+    const { placeDetails } = req.body; // Extract updated accommodation data
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found." });
-    }
+    // Find the accommodation by its ID
+    const accommodation = await Accommodation.findById(req.params.id);
 
-    // Find and update the existing accommodation based on its ID and the user's ID
-    const updatedAccommodation = await Accommodation.findOneAndUpdate(
-      { _id: id, owner: user._id }, // Make sure the user owns the accommodation before updating
-      updatedAccommodationData, // Use the updated accommodation data
-      { new: true }
-    );
-
-    if (!updatedAccommodation) {
+    if (!accommodation) {
       return res.status(404).json({ error: "Accommodation not found." });
     }
+
+    // You can update specific fields here based on the data in placeDetails
+    accommodation.title = placeDetails.title;
+    accommodation.address = placeDetails.address;
+    accommodation.photos = placeDetails.addedPhotos;
+    accommodation.description = placeDetails.description;
+    accommodation.perks = placeDetails.perks;
+    accommodation.extraInfo = placeDetails.extraInfo;
+    accommodation.checkIn = placeDetails.checkIn;
+    accommodation.checkOut = placeDetails.checkOut;
+    accommodation.maxGuests = placeDetails.maxGuests;
+    accommodation.price = placeDetails.price;
+
+    // Save the updated accommodation
+    await accommodation.save();
 
     res.status(200).json({ message: "Accommodation updated successfully." });
   } catch (error) {
