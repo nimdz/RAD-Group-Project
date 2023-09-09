@@ -14,6 +14,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 const User = require("./models/user");
 const Accommodation = require("./models/accommodation");
+const Booking=require("./models/bookings");;
 
 const jwtSecret = process.env.JWT_SECRET_KEY;
 
