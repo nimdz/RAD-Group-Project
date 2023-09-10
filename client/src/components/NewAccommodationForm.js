@@ -1,6 +1,6 @@
 import Perks from "../components/Perks";
 import PhotosUploader from "../components/PhotosUploader";
-import { useContext, useEffect, useState } from "react";
+import { useContext, /*useEffect ,*/ useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ProfileNavBar from "./ProfileNavBar";
@@ -11,7 +11,7 @@ import { UserContext } from "./UserContext";
 export default function NewAccommodationForm() {
   const { id } = useParams();
   const { user } = useContext(UserContext);
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -24,22 +24,22 @@ export default function NewAccommodationForm() {
   const [price, setPrice] = useState(100);
   const [redirect, setRedirect] = useState(false);
 
-  useEffect(() => {
-    axios.get("/accommodations/" + id).then((response) => {
-      const { data } = response;
-      setEmail(data.email);
-      setTitle(data.title);
-      setAddress(data.address);
-      setAddedPhotos(data.photos);
-      setDescription(data.description);
-      setPerks(data.perks);
-      setExtraInfo(data.extraInfo);
-      setCheckIn(data.checkIn);
-      setCheckOut(data.checkOut);
-      setMaxGuests(data.maxGuests);
-      setPrice(data.price);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("/accommodations/" + id).then((response) => {
+  //     const { data } = response;
+  //     setEmail(data.email);
+  //     setTitle(data.title);
+  //     setAddress(data.address);
+  //     setAddedPhotos(data.photos);
+  //     setDescription(data.description);
+  //     setPerks(data.perks);
+  //     setExtraInfo(data.extraInfo);
+  //     setCheckIn(data.checkIn);
+  //     setCheckOut(data.checkOut);
+  //     setMaxGuests(data.maxGuests);
+  //     setPrice(data.price);
+  //   });
+  // }, []);
 
   function inputHeader(text) {
     return <h2 className="text-2xl mt-4">{text}</h2>;
