@@ -32,7 +32,7 @@ export default function NavBar() {
 
   return (
     <div
-      className={`fixed flex justify-between items-center w-full px-[50px] lg:px-[100px] h-[60px] ${
+      className={`fixed flex justify-between z-10 items-center w-full px-[50px] lg:px-[100px] h-[60px] ${
         isScrolled ? "bg-primary_400" : "bg-transparent"
       }`}
     >

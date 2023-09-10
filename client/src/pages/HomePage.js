@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 import CheckOutBar from "../components/CheckOutBar";
 import ContactUs from "../components/ContactUs";
 import Footer from "../components/Footer";
+import HotelSlider from "../components/HotelSlider";
 
 export default function HomePage() {
   return (
@@ -15,8 +16,9 @@ export default function HomePage() {
       <div className="flex w-full -mt-10">
         <CheckOutBar />
       </div>
-      <div className="w-full flex justify-center mt-10 text-[20px] font-semibold">
+      <div className="w-full flex-col justify-center mt-10 text-[20px] text-center font-semibold">
         <h1>Featured Hotels</h1>
+        <HotelSlider />
       </div>
       <div className="w-full justify-start mt-10  px-[50px] lg:px-[100px]">
         <h1 className="text-[20px] font-semibold">Facilities & Services</h1>
