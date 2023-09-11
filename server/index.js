@@ -295,6 +295,57 @@ app.put("/accommodations/:id", async (req, res) => {
   }
 });
 
+app.get("/api-accommodation/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const accommodations = await Accommodation.find(
+      { email },
+      "title address userType"
+    ); // Modify this to fetch the desired fields
+
+    res.status(200).json(accommodations);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+app.delete("/api-accommodation/:title", async (req, res) => {
+  try {
+    const title = req.params.title;
+    await Accommodation.findOneAndDelete({ title }); // Find and delete user by email
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while deleting user." });
+  }
+});
+
+app.get("/admin-accommodation", async (req, res) => {
+  try {
+    const accommodations = await Accommodation.find(
+      {},
+      "title address userType"
+    ); // Modify this to fetch the desired fields
+
+    res.status(200).json(accommodations);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+app.delete("/admin-accommodation/:title", async (req, res) => {
+  try {
+    const title = req.params.title;
+    await Accommodation.findOneAndDelete({ title }); // Find and delete user by email
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while deleting user." });
+  }
+});
+
 // ... (Rest of your code)
 
 app.get("/user-places", async (req, res) => {

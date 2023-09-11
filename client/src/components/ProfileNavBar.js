@@ -183,7 +183,10 @@ export default function ProfileNavBar() {
               </Link>
             </div>
             <div className="border-r ml-2 pr-2">
-              <Link className="flex items-center text-sm font-semibold">
+              <Link
+                className="flex items-center text-sm font-semibold"
+                to="/profile/admin_accommodation"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

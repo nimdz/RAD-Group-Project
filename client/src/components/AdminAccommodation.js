@@ -4,18 +4,17 @@ import BG from "../assets/images/profilebg.jpg";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import AccommodationTable from "../components/AccommodationTable";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../components/UserContext";
 
-export default function Accommodation() {
+export default function AdminAccommodation() {
   const [userData, setUserData] = useState([]);
   const { user } = useContext(UserContext);
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`/api-accommodation/${user.email}`);
+      const response = await axios.get(`/admin-accommodation`);
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -23,14 +22,14 @@ export default function Accommodation() {
   };
 
   useEffect(() => {
-    if (user && user.userType === "hotelOwner") {
+    if (user && user.userType === "admin") {
       fetchUserData();
     }
   }, [user]);
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api-accommodation/${user.title}`);
+      await axios.delete(`/admin-accommodation/${user.title}`);
       fetchUserData();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -43,28 +42,6 @@ export default function Accommodation() {
         <img src={BG} alt="background" className="object-cover w-full" />
       </div>
       <ProfileNavBar />
-      <div className="flex justify-center ">
-        <Link
-          to="/profile/accommodation/new"
-          className="flex py-2 px-4 my-5 items-center bg-white shadow-md border rounded-lg text-sm font-semibold"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-4 h-4 mr-1"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-          Add new Accommodation
-        </Link>
-      </div>
       <AccommodationTable data={userData} onDelete={handleDelete} />
       <Footer />
     </>

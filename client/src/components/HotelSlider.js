@@ -74,7 +74,7 @@ export default function HomeSlider() {
         {slides.length > 0 &&
           slides.map((slide) => (
             <Link key={slide} className="flex mt-3 rounded-lg">
-              <div className="flex-col mx-1 bg-gray-300 rounded-lg h-[300px]">
+              <div className="flex-col mx-1 bg-gray-100 rounded-lg h-[300px]">
                 {slide.photos.length > 0 && (
                   <div className="h-[190px]">
                     <img
