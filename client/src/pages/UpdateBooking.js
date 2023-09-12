@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function UpdateBooking() {
+  const navigate = useNavigate();
+  const { bookingId } = useParams();
+
   const [place, setPlace] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [noofPeople, setNoofPeople] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
 
-  const { id } = useParams();
-  const navigate = useNavigate();
-
   useEffect(() => {
     // Fetch booking details by ID and populate the form
-    axios.get(`http://localhost:4000/booking/update/${id}`)
+    const token = localStorage.getItem("userToken");
+
+    if (!token) {
+      console.error('User is not authenticated. Redirect to login or handle accordingly.');
+      return;
+    }
+
+    axios
+      .get(`/booking/${bookingId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         const bookingData = response.data;
         setPlace(bookingData.place);
@@ -26,10 +38,17 @@ export default function UpdateBooking() {
       .catch((err) => {
         console.error(err);
       });
-  }, [id]);
+  }, [bookingId]);
 
-  function updateBooking(e) {
+  const updateBooking = (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("userToken");
+
+    if (!token) {
+      console.error('User is not authenticated. Redirect to login or handle accordingly.');
+      return;
+    }
+
     const updatedBooking = {
       place,
       checkIn,
@@ -38,29 +57,31 @@ export default function UpdateBooking() {
       phoneNo,
     };
 
-    // Make a PUT request to update the booking
-    axios.put(`http://localhost:4000/booking/update/${id}`, updatedBooking)
+    axios
+      .put(`/booking/update/${bookingId}`, updatedBooking, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(() => {
         alert("Booking Updated");
-        navigate("/profile"); // Redirect to the profile page after updating
+        navigate("/profile");
       })
       .catch((err) => {
         console.error(err);
       });
-  }
+  };
 
   return (
-    <div className="container content-center">
-      <form onSubmit={updateBooking}>
-        <div className="form-group">
-          <h1 className="text-[32px] font-semibold text-center">Update Booking</h1>
-          <label htmlFor="place">Place</label>
-          <input type="text"
-            className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm 
-            rounded-lg focus:ring-blue-500 focus:border-blue-500 
-            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-            dark:focus:border-blue-500
+    <div className="container">
+    <form onSubmit={updateBooking}>
+      <div className="form-group">
+      <h1 className="text-[32px] font-semibold text-center">Add Booking</h1>
+        <label htmlFor="place">Place</label>
+        <input
+          type="text"
+          className={`border w-full rounded-md shadow-sm 
+          shadow-gray-500 py-2 pl-2 mt-6 text-sm  
             }`}
           id="place"
           placeholder="Enter Place Name"
@@ -71,12 +92,10 @@ export default function UpdateBooking() {
       </div>
       <div className="form-group">
         <label htmlFor="checkIn">Check-In</label>
-        <input type="date"
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm 
-            rounded-lg focus:ring-blue-500 focus:border-blue-500 
-            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-            dark:focus:border-blue-500
+        <input
+          type="date"
+          className={`border w-full rounded-md 
+           shadow-sm shadow-gray-500 py-2 pl-2 mt-6 text-sm 
             }`}
           id="checkIn"
           value={checkIn}
@@ -86,12 +105,10 @@ export default function UpdateBooking() {
       </div>
       <div className="form-group">
         <label htmlFor="checkOut">Check-Out</label>
-        <input type="date"
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm 
-            rounded-lg focus:ring-blue-500 focus:border-blue-500 
-            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-            dark:focus:border-blue-500
+        <input
+          type="date"
+          className={`border w-full rounded-md 
+          shadow-sm shadow-gray-500 py-2 pl-2 mt-6 text-sm 
             }`}
           id="checkOut"
           value={checkOut}
@@ -101,12 +118,10 @@ export default function UpdateBooking() {
       </div>
       <div className="form-group">
         <label htmlFor="noofPeople">Number of People</label>
-        <input type="number"
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm 
-            rounded-lg focus:ring-blue-500 focus:border-blue-500 
-            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-            dark:focus:border-blue-500
+        <input
+          type="number"
+          className={`border w-full rounded-md shadow-sm shadow-gray-500 
+          py-2 pl-2 mt-6 text-sm 
             }`}
           id="noofPeople"
           placeholder="Enter Number of People"
@@ -117,12 +132,10 @@ export default function UpdateBooking() {
       </div>
       <div className="form-group">
         <label htmlFor="phoneNo">Phone Number</label>
-        <input type="tel"
-          className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm 
-            rounded-lg focus:ring-blue-500 focus:border-blue-500 
-            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-            dark:focus:border-blue-500
+        <input
+          type="tel"
+          className={`border w-full
+           rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-6 text-sm
             }`}
           id="phoneNo"
           placeholder="Enter Phone Number"
@@ -131,39 +144,33 @@ export default function UpdateBooking() {
           required
         />
       </div>
-
-
-  
-   
-        <div className="form-group">
-          <button
-            type="submit"
-            className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-      <Link
-        to="/booking"
-        className="absolute right-0 bottom-0 mr-100 mb-20 text-sm flex items-center"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-3 h-3 mr-2"
+      <button 
+        type="submit"
+        className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-          />
-        </svg>
-        Back to Booking Page
-      </Link>
-    </div>
+        Update Booking
+      </button>
+      <Link
+            to="/profile"
+            className="absolute right-0 bottom-0 mr-20 mb-20 text-sm flex items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-3 h-3 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              />
+            </svg>
+            Back to Profile Page
+            </Link>
+      </form>
+      </div>
   );
 }
