@@ -3,7 +3,7 @@ import ProfileNavBar from "../components/ProfileNavBar";
 import BG from "../assets/images/profilebg.jpg";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import AccommodationTable from "../components/AccommodationTable";
+import AdminAccommodationTable from "../components/AdminAccommodationTable";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../components/UserContext";
@@ -27,9 +27,9 @@ export default function AdminAccommodation() {
     }
   }, [user]);
 
-  const handleDelete = async () => {
+  const handleDelete = async (index) => {
     try {
-      await axios.delete(`/admin-accommodation/${user.title}`);
+      await axios.delete(`/admin-accommodation/${userData[index].title}`);
       fetchUserData();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -42,7 +42,7 @@ export default function AdminAccommodation() {
         <img src={BG} alt="background" className="object-cover w-full" />
       </div>
       <ProfileNavBar />
-      <AccommodationTable data={userData} onDelete={handleDelete} />
+      <AdminAccommodationTable data={userData} onDelete={handleDelete} />
       <Footer />
     </>
   );

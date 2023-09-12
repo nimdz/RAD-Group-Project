@@ -22,20 +22,21 @@ export default function Accommodation() {
     }
   };
 
+  const handleDelete = async (index) => {
+    try {
+      await axios.delete(`/api-accommodation/${userData[index].title}`);
+      fetchUserData();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   useEffect(() => {
     if (user && user.userType === "hotelOwner") {
       fetchUserData();
     }
   }, [user]);
 
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`/api-accommodation/${user.title}`);
-      fetchUserData();
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
   return (
     <>
       <NavBar />

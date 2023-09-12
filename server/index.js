@@ -259,41 +259,41 @@ app.post("/accommodations", async (req, res) => {
   }
 });
 
-// Route for updating an existing accommodation
-app.put("/accommodations/:id", async (req, res) => {
-  try {
-    const { placeDetails } = req.body; // Extract updated accommodation data
+// // Route for updating an existing accommodation
+// app.put("/accommodations/:id", async (req, res) => {
+//   try {
+//     const { placeDetails } = req.body; // Extract updated accommodation data
 
-    // Find the accommodation by its ID
-    const accommodation = await Accommodation.findById(req.params.id);
+//     // Find the accommodation by its ID
+//     const accommodation = await Accommodation.findById(req.params.id);
 
-    if (!accommodation) {
-      return res.status(404).json({ error: "Accommodation not found." });
-    }
+//     if (!accommodation) {
+//       return res.status(404).json({ error: "Accommodation not found." });
+//     }
 
-    // You can update specific fields here based on the data in placeDetails
-    accommodation.title = placeDetails.title;
-    accommodation.address = placeDetails.address;
-    accommodation.photos = placeDetails.addedPhotos;
-    accommodation.description = placeDetails.description;
-    accommodation.perks = placeDetails.perks;
-    accommodation.extraInfo = placeDetails.extraInfo;
-    accommodation.checkIn = placeDetails.checkIn;
-    accommodation.checkOut = placeDetails.checkOut;
-    accommodation.maxGuests = placeDetails.maxGuests;
-    accommodation.price = placeDetails.price;
+//     // You can update specific fields here based on the data in placeDetails
+//     accommodation.title = placeDetails.title;
+//     accommodation.address = placeDetails.address;
+//     accommodation.photos = placeDetails.addedPhotos;
+//     accommodation.description = placeDetails.description;
+//     accommodation.perks = placeDetails.perks;
+//     accommodation.extraInfo = placeDetails.extraInfo;
+//     accommodation.checkIn = placeDetails.checkIn;
+//     accommodation.checkOut = placeDetails.checkOut;
+//     accommodation.maxGuests = placeDetails.maxGuests;
+//     accommodation.price = placeDetails.price;
 
-    // Save the updated accommodation
-    await accommodation.save();
+//     // Save the updated accommodation
+//     await accommodation.save();
 
-    res.status(200).json({ message: "Accommodation updated successfully." });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while updating accommodation." });
-  }
-});
+//     res.status(200).json({ message: "Accommodation updated successfully." });
+//   } catch (error) {
+//     console.error(error);
+//     res
+//       .status(500)
+//       .json({ error: "An error occurred while updating accommodation." });
+//   }
+// });
 
 app.get("/api-accommodation/:email", async (req, res) => {
   try {
@@ -314,7 +314,7 @@ app.get("/api-accommodation/:email", async (req, res) => {
 app.delete("/api-accommodation/:title", async (req, res) => {
   try {
     const title = req.params.title;
-    await Accommodation.findOneAndDelete({ title }); // Find and delete user by email
+    console.log(await Accommodation.findOneAndDelete({ title }));
     res.status(200).json({ message: "User deleted successfully." });
   } catch (error) {
     res.status(500).json({ error: "An error occurred while deleting user." });
@@ -325,10 +325,22 @@ app.get("/admin-accommodation", async (req, res) => {
   try {
     const accommodations = await Accommodation.find(
       {},
-      "title address userType"
+      "email title address userType"
     ); // Modify this to fetch the desired fields
 
     res.status(200).json(accommodations);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+app.get("/api-users", async (req, res) => {
+  try {
+    const users = await User.find({}, "_id fullName email userType"); // Modify this to fetch the desired fields
+
+    res.status(200).json(users);
   } catch (error) {
     res
       .status(500)

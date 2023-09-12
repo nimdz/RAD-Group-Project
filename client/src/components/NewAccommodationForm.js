@@ -1,7 +1,7 @@
 import Perks from "../components/Perks";
 import PhotosUploader from "../components/PhotosUploader";
 import { useContext, /*useEffect ,*/ useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate /*useParams*/ } from "react-router-dom";
 import axios from "axios";
 import ProfileNavBar from "./ProfileNavBar";
 import NavBar from "./NavBar";
@@ -9,7 +9,7 @@ import BG from "../assets/images/profilebg.jpg";
 import { UserContext } from "./UserContext";
 
 export default function NewAccommodationForm() {
-  const { id } = useParams();
+  // const { id } = useParams();
   const { user } = useContext(UserContext);
   // const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
@@ -77,33 +77,6 @@ export default function NewAccommodationForm() {
       placeDetails,
     });
     setRedirect(true);
-  }
-
-  async function updatePlace(e) {
-    e.preventDefault();
-
-    const placeDetails = {
-      email: user.email,
-      title,
-      address,
-      addedPhotos,
-      description,
-      perks,
-      extraInfo,
-      checkIn,
-      checkOut,
-      maxGuests,
-      price,
-    };
-
-    try {
-      await axios.put(`/accommodations/${id}`, {
-        placeDetails,
-      });
-      setRedirect(true);
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   if (redirect) {

@@ -10,6 +10,7 @@ import axios from "axios";
 import ProfilePage from "./pages/ProfilePage";
 import Accommodation from "./components/Accommodation";
 import NewAccommodation from "./components/NewAccommodationForm";
+import AdminAccommodation from "./components/AdminAccommodation";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
@@ -30,6 +31,10 @@ function App() {
         <Route
           path="/profile/accommodation/new"
           element={<NewAccommodation />}
+        />
+        <Route
+          path="/profile/admin_accommodation"
+          element={<AdminAccommodation />}
         />
       </Routes>
     </UserContextProvider>

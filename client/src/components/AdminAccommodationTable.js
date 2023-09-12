@@ -49,7 +49,7 @@ const AdminAccommodationTable = ({ data, onDelete }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-no-wrap">
                   <button
-                    onClick={() => onDelete(item.email)}
+                    onClick={() => onDelete(index)}
                     className="text-red-500"
                   >
                     Delete
