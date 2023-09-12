@@ -1,32 +1,65 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-
+import { Link,useNavigate} from "react-router-dom";
 
 export default function AllBookings() {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
 
   const handleDeleteBooking = (bookingId) => {
-    // Make an HTTP DELETE request to delete the booking by ID
-    axios.delete(`http://localhost:4000/booking/${bookingId}`)
+    // Get the user token from local storage
+    const userToken = localStorage.getItem('userToken');
+
+    if (!userToken) {
+      // Handle the case when the token is not available (user is not authenticated)
+      console.error('User is not authenticated. Redirect to login or handle accordingly.');
+      return;
+    }
+
+    // Make a DELETE request to delete the booking
+    axios.delete(`/booking/delete/${bookingId}`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`, // Include the token in the headers
+      },
+    })
       .then(() => {
         // Remove the deleted booking from the local state
         setBookings((prevBookings) => prevBookings.filter((booking) => booking.id !== bookingId));
+
+           // Use alert() to prompt the user
+           alert('Booking deleted successfully.');
+           navigate("/profile");
       })
-      .catch((err) => {
-        console.error("Error deleting booking:", err);
+      .catch((error) => {
+        console.error("Error deleting booking:", error);
       });
-  };  
+  };
+
   useEffect(() => {
-    // Fetch all booking details when the component mounts
-    axios.get("http://localhost:4000/booking")
+    // Get the user token from local storage
+    const userToken = localStorage.getItem('userToken');
+
+    if (!userToken) {
+      // Handle the case when the token is not available (user is not authenticated)
+      console.error('User is not authenticated. Redirect to login or handle accordingly.');
+      return;
+    }
+    
+
+    // Make a GET request to fetch bookings for the authenticated user
+    axios.get("/booking", {
+      headers: {
+        Authorization: `Bearer ${userToken}`, // Include the token in the headers
+      },
+    })
       .then((response) => {
-        setBookings(response.data);
+        setBookings(response.data.bookings);
       })
-      .catch((err) => {
-        console.error("Error fetching bookings:", err);
+      .catch((error) => {
+        console.error("Error fetching bookings:", error);
       });
   }, []);
+
 
     // Function to format ISO date and time to a human-readable format
     const formatDate = (isoDateString) => {
@@ -50,8 +83,8 @@ export default function AllBookings() {
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking, index) => (
-              <tr key={index}>
+            {bookings.map((booking) => (
+              <tr key={booking._id}>
                 <td className="px-12 py-3 border bg-dark-100 text-left 
                    text-xs leading-4 font-medium text-gray-500 uppercase tracking-wide">{booking.place}               
                 </td>
@@ -70,14 +103,14 @@ export default function AllBookings() {
                 <td className="px-12 py-3 border bg-dark-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wide">
                    <button       
                    className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-2 text-sm"
-                   onClick={() => handleDeleteBooking(booking.id)}>Delete Booking</button>
-                   <Link to="/booking/update">
+                   onClick={() => handleDeleteBooking(booking._id)}>Delete Booking</button>
+                   <Link  to={`/booking/update/${booking._id}`}>
                    <button 
                     className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-2 text-sm">
                     Update Booking
                     </button>
                     </Link>
-                        </td>
+                    </td>
               </tr>
             ))}
           </tbody>
