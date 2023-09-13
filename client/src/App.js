@@ -11,6 +11,8 @@ import ProfilePage from "./pages/ProfilePage";
 import Accommodation from "./components/Accommodation";
 import NewAccommodation from "./components/NewAccommodationForm";
 import AdminAccommodation from "./components/AdminAccommodation";
+import Service from "./components/Service";
+import ServiceForm from "./components/ServiceForm";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
@@ -36,6 +38,8 @@ function App() {
           path="/profile/admin_accommodation"
           element={<AdminAccommodation />}
         />
+        <Route path="/profile/service" element={<Service />} />
+        <Route path="/profile/service/new" element={<ServiceForm />} />
       </Routes>
     </UserContextProvider>
   );

@@ -13,22 +13,23 @@ export default function HomeSlider() {
   const defaultURL = "http://localhost:4000/";
 
   useEffect(() => {
-    axios.get("/accommodation").then(({ data }) => {
+    axios.get("/service").then(({ data }) => {
       setSlides(data);
     });
   }, []);
 
   // Define a function to update slidesToShow based on screen width
   const updateSlidesToShow = () => {
-    if (window.innerWidth >= 1600) {
+    const screenWidth = window.innerWidth;
+    if (screenWidth >= 1600 && slidesToShow !== 5) {
       setSlidesToShow(5);
-    } else if (window.innerWidth >= 1200) {
+    } else if (screenWidth >= 1200 && slidesToShow !== 4) {
       setSlidesToShow(4);
-    } else if (window.innerWidth >= 980) {
+    } else if (screenWidth >= 980 && slidesToShow !== 3) {
       setSlidesToShow(3);
-    } else if (window.innerWidth >= 750) {
+    } else if (screenWidth >= 750 && slidesToShow !== 2) {
       setSlidesToShow(2);
-    } else {
+    } else if (screenWidth < 750 && slidesToShow !== 1) {
       setSlidesToShow(1);
     }
   };
@@ -57,11 +58,11 @@ export default function HomeSlider() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 1000,
+    speed: 10000,
     slidesToShow: slidesToShow, // Use the dynamic value
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 0,
     loop: true,
     cssEase: "linear",
     prevArrow: <CustomPrevArrow />,
@@ -69,38 +70,35 @@ export default function HomeSlider() {
   };
 
   return (
-    <div className="relative z-0 px-[30px] md:px-[50px] lg:px-[100px] gap-1 text-left">
+    <div className="relative z-0 px-[30px]  gap-1 text-center mt-[20px]">
       <Slider {...settings}>
         {slides.length > 0 &&
           slides.map((slide) => (
-            <Link key={slide} className="flex mt-3 rounded-lg">
-              <div className="flex-col mx-1 bg-white rounded-lg h-[300px]">
+            <div key={slide} className="flex mt-3 rounded-lg  h-[250px]">
+              <div className="flex-col mx-1 bg-white rounded-lg shadow-md border h-[230px]">
                 {slide.photos.length > 0 && (
-                  <div className="h-[190px]">
+                  <div className="flex justify-center mt-[20px]">
                     <img
-                      className="h-full w-full object-cover overflow-hidden rounded-t-lg"
+                      className="h-[100px] w-[100px] overflow-hidden rounded-t-lg"
                       src={defaultURL + "uploads/" + slide.photos[0]}
                       alt="slide"
                     />
                   </div>
                 )}
-                <div className="content w-full h-[100px] mt-[3px] mx-[10px]">
+                <div className="content w-full h-[100px] mt-[3px] ">
                   <div className="h-1/4">
                     <h1 className="truncate-2-lines text-[16px] font-semibold">
                       {slide.title}
                     </h1>
                   </div>
                   <div className="h-2/4">
-                    <h2 className="truncate-2-lines text-[12px]">
-                      {slide.address}
+                    <h2 className="truncate-2-lines text-[12px] mx-[10px]">
+                      {slide.description}
                     </h2>
-                  </div>
-                  <div className="h-1/4 text-[14px] font-semibold">
-                    <h3>Per night: ${slide.price}.00</h3>
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
       </Slider>
     </div>

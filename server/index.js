@@ -14,6 +14,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 const User = require("./models/user");
 const Accommodation = require("./models/accommodation");
+const Service = require("./models/service");
 
 const jwtSecret = process.env.JWT_SECRET_KEY;
 
@@ -377,6 +378,60 @@ app.get("/accommodation/:id", async (req, res) => {
 
 app.get("/accommodation", async (req, res) => {
   res.json(await Accommodation.find());
+});
+
+app.post("/service", async (req, res) => {
+  try {
+    const { serviceDetails } = req.body; // Extract user email
+
+    const email = serviceDetails.email;
+
+    const user = await User.findOne({ email }); // Find the user by email
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    await Service.create({
+      email: user.email,
+      title: serviceDetails.title,
+      photos: serviceDetails.addedPhotos,
+      description: serviceDetails.description,
+    });
+
+    res.status(201).json({ message: "Accommodation added successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding accommodation." });
+  }
+});
+
+app.get("/api-service/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const service = await Service.find({ email }, "title description userType");
+    res.status(200).json(service);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+app.delete("/api-service/:title", async (req, res) => {
+  try {
+    const title = req.params.title;
+    await Service.findOneAndDelete({ title }); // Find and delete user by email
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while deleting user." });
+  }
+});
+
+app.get("/service", async (req, res) => {
+  res.json(await Service.find());
 });
 
 app.listen(port, () => {
