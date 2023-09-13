@@ -286,48 +286,39 @@ app.post("/accommodations", async (req, res) => {
   }
 });
 
-// // Route for updating an existing accommodation
-// app.put("/accommodations/:id", async (req, res) => {
-//   try {
-//     const { placeDetails } = req.body; // Extract updated accommodation data
+app.put("/api-accommodation/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Get the service title from the request parameters
+    const { title, address } = req.body; // Get updated service details from the request body
 
-//     // Find the accommodation by its ID
-//     const accommodation = await Accommodation.findById(req.params.id);
+    const service = await Accommodation.findByIdAndUpdate(
+      id,
+      {
+        title,
+        address,
+      },
+      { new: true } // To return the updated booking
+    );
 
-//     if (!accommodation) {
-//       return res.status(404).json({ error: "Accommodation not found." });
-//     }
+    if (!service) {
+      return res.status(404).json({ error: "Service not found." });
+    }
 
-//     // You can update specific fields here based on the data in placeDetails
-//     accommodation.title = placeDetails.title;
-//     accommodation.address = placeDetails.address;
-//     accommodation.photos = placeDetails.addedPhotos;
-//     accommodation.description = placeDetails.description;
-//     accommodation.perks = placeDetails.perks;
-//     accommodation.extraInfo = placeDetails.extraInfo;
-//     accommodation.checkIn = placeDetails.checkIn;
-//     accommodation.checkOut = placeDetails.checkOut;
-//     accommodation.maxGuests = placeDetails.maxGuests;
-//     accommodation.price = placeDetails.price;
-
-//     // Save the updated accommodation
-//     await accommodation.save();
-
-//     res.status(200).json({ message: "Accommodation updated successfully." });
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while updating accommodation." });
-//   }
-// });
+    res.status(200).json({ message: "Service updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the service." });
+  }
+});
 
 app.get("/api-accommodation/:email", async (req, res) => {
   try {
     const email = req.params.email;
     const accommodations = await Accommodation.find(
       { email },
-      "title address userType"
+      "title address description userType"
     ); // Modify this to fetch the desired fields
 
     res.status(200).json(accommodations);
@@ -384,8 +375,6 @@ app.delete("/admin-accommodation/:title", async (req, res) => {
     res.status(500).json({ error: "An error occurred while deleting user." });
   }
 });
-
-// ... (Rest of your code)
 
 app.get("/user-places", async (req, res) => {
   const { token } = req.cookies;

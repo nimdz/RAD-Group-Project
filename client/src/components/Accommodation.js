@@ -11,6 +11,7 @@ import { UserContext } from "../components/UserContext";
 
 export default function Accommodation() {
   const [userData, setUserData] = useState([]);
+  const [editingService, setEditingService] = useState(null);
   const { user } = useContext(UserContext);
 
   const fetchUserData = async () => {
@@ -28,6 +29,20 @@ export default function Accommodation() {
       fetchUserData();
     } catch (error) {
       console.error("Error deleting user:", error);
+    }
+  };
+
+  const handleUpdate = async (updatedService) => {
+    try {
+      console.log("id: " + updatedService._id);
+      await axios.put(
+        `/api-accommodation/${updatedService._id}`,
+        updatedService
+      );
+      fetchUserData();
+      setEditingService(null); // Clear the editing state after successful update
+    } catch (error) {
+      console.error("Error updating service:", error);
     }
   };
 
@@ -66,7 +81,13 @@ export default function Accommodation() {
           Add new Accommodation
         </Link>
       </div>
-      <AccommodationTable data={userData} onDelete={handleDelete} />
+      <AccommodationTable
+        data={userData}
+        onDelete={handleDelete}
+        onUpdate={handleUpdate} // Pass the handleUpdate function to ServiceTable
+        setEditingService={setEditingService} // Pass a state updater for editing
+        editingService={editingService}
+      />
       <Footer />
     </>
   );
