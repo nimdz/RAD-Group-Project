@@ -1,7 +1,7 @@
 import Perks from "../components/Perks";
 import PhotosUploader from "../components/PhotosUploader";
 import { useContext, /*useEffect ,*/ useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate /*useParams*/ } from "react-router-dom";
 import axios from "axios";
 import ProfileNavBar from "./ProfileNavBar";
 import NavBar from "./NavBar";
@@ -9,7 +9,7 @@ import BG from "../assets/images/profilebg.jpg";
 import { UserContext } from "./UserContext";
 
 export default function NewAccommodationForm() {
-  const { id } = useParams();
+  // const { id } = useParams();
   const { user } = useContext(UserContext);
   // const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
@@ -79,33 +79,6 @@ export default function NewAccommodationForm() {
     setRedirect(true);
   }
 
-  async function updatePlace(e) {
-    e.preventDefault();
-
-    const placeDetails = {
-      email: user.email,
-      title,
-      address,
-      addedPhotos,
-      description,
-      perks,
-      extraInfo,
-      checkIn,
-      checkOut,
-      maxGuests,
-      price,
-    };
-
-    try {
-      await axios.put(`/accommodations/${id}`, {
-        placeDetails,
-      });
-      setRedirect(true);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   if (redirect) {
     return <Navigate to={"../profile/accommodation"} />;
   }
@@ -129,6 +102,7 @@ export default function NewAccommodationForm() {
               placeholder="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              className="w-full border rounded-md py-1 pl-2"
             />
 
             {preInput("Address", "Address to this place")}
@@ -137,6 +111,7 @@ export default function NewAccommodationForm() {
               placeholder="address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              className="w-full border rounded-md py-1 pl-2"
             />
 
             {preInput("Photos", "more = better")}
@@ -149,6 +124,7 @@ export default function NewAccommodationForm() {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              className="border rounded-md w-full py-1 pl-2 h-[100px]"
             />
 
             <div className="grid mt-2 gap-2 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
@@ -159,6 +135,7 @@ export default function NewAccommodationForm() {
             <textarea
               value={extraInfo}
               onChange={(e) => setExtraInfo(e.target.value)}
+              className="border rounded-md w-full py-1 pl-2 h-[100px]"
             />
 
             {preInput(
@@ -174,7 +151,7 @@ export default function NewAccommodationForm() {
                   value={checkIn}
                   onChange={(e) => setCheckIn(e.target.value)}
                   placeholder="14"
-                  className="py-1 pl-2 border rounded-xl"
+                  className="py-1 pl-2 border rounded-md"
                 />
               </div>
               <div>
@@ -184,7 +161,7 @@ export default function NewAccommodationForm() {
                   value={checkOut}
                   onChange={(e) => setCheckOut(e.target.value)}
                   placeholder="8"
-                  className="py-1 pl-2 border rounded-xl"
+                  className="py-1 pl-2 border rounded-md"
                 />
               </div>
               <div>
@@ -194,7 +171,7 @@ export default function NewAccommodationForm() {
                   value={maxGuests}
                   onChange={(e) => setMaxGuests(e.target.value)}
                   placeholder="5"
-                  className="py-1 pl-2 border rounded-xl"
+                  className="py-1 pl-2 border rounded-md"
                 />
               </div>
               <div>
@@ -204,12 +181,12 @@ export default function NewAccommodationForm() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="5"
-                  className="py-1 pl-2 border rounded-xl"
+                  className="py-1 pl-2 border rounded-md"
                 />
               </div>
             </div>
             <div>
-              <button className="bg-secondary_500 text-white my-4 py-1 px-4 rounded-lg">
+              <button className="bg-secondary_500 text-white my-4 py-2 px-8 rounded-md font-semibold">
                 Save
               </button>
             </div>

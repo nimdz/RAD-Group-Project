@@ -1,21 +1,21 @@
 import React from "react";
-import ProfileNavBar from "../components/ProfileNavBar";
+import ProfileNavBar from "./ProfileNavBar";
 import BG from "../assets/images/profilebg.jpg";
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
-import AccommodationTable from "../components/AccommodationTable";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../components/UserContext";
+import { UserContext } from "./UserContext";
+import ServiceTable from "./ServiceTable";
 
-export default function Accommodation() {
+export default function Service() {
   const [userData, setUserData] = useState([]);
   const { user } = useContext(UserContext);
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`/api-accommodation/${user.email}`);
+      const response = await axios.get(`/api-service/${user.email}`);
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -24,7 +24,7 @@ export default function Accommodation() {
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`/api-accommodation/${userData[index].title}`);
+      await axios.delete(`/api-service/${userData[index].title}`);
       fetchUserData();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -32,7 +32,7 @@ export default function Accommodation() {
   };
 
   useEffect(() => {
-    if (user && user.userType === "hotelOwner") {
+    if (user && user.userType === "admin") {
       fetchUserData();
     }
   }, [user]);
@@ -46,7 +46,7 @@ export default function Accommodation() {
       <ProfileNavBar />
       <div className="flex justify-center ">
         <Link
-          to="/profile/accommodation/new"
+          to="/profile/service/new"
           className="flex py-2 px-4 my-5 items-center bg-white shadow-md border rounded-lg text-sm font-semibold"
         >
           <svg
@@ -63,10 +63,10 @@ export default function Accommodation() {
               d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
-          Add new Accommodation
+          Add new Facility
         </Link>
       </div>
-      <AccommodationTable data={userData} onDelete={handleDelete} />
+      <ServiceTable data={userData} onDelete={handleDelete} />
       <Footer />
     </>
   );

@@ -5,6 +5,7 @@ import CheckOutBar from "../components/CheckOutBar";
 import ContactUs from "../components/ContactUs";
 import Footer from "../components/Footer";
 import HotelSlider from "../components/HotelSlider";
+import ServiceSlider from "../components/ServiceSlider";
 
 export default function HomePage() {
   return (
@@ -20,13 +21,14 @@ export default function HomePage() {
         <h1>Featured Hotels</h1>
         <HotelSlider />
       </div>
-      <div className="w-full justify-start mt-10  px-[50px] lg:px-[100px]">
+      <div className="w-full justify-start mt-20  px-[50px] lg:px-[100px]">
         <h1 className="text-[20px] font-semibold">Facilities & Services</h1>
         <p className="text-sm w-3/5">
           Experience comfort and convenience with our hotel's private
           workspaces, ampling parking area, complimentary Wi-Fi, and daily
           breakfast offerings etc.
         </p>
+        <ServiceSlider />
       </div>
       <ContactUs />
       <Footer />

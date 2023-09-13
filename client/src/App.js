@@ -10,6 +10,9 @@ import axios from "axios";
 import ProfilePage from "./pages/ProfilePage";
 import Accommodation from "./components/Accommodation";
 import NewAccommodation from "./components/NewAccommodationForm";
+import AdminAccommodation from "./components/AdminAccommodation";
+import Service from "./components/Service";
+import ServiceForm from "./components/ServiceForm";
 import GetBooking from "./pages/GetBooking";
 import AddBooking from "./pages/AddBooking";
 import UpdateBooking from "./pages/UpdateBooking";
@@ -34,6 +37,12 @@ function App() {
           path="/profile/accommodation/new"
           element={<NewAccommodation />}
         />
+        <Route
+          path="/profile/admin_accommodation"
+          element={<AdminAccommodation />}
+        />
+        <Route path="/profile/service" element={<Service />} />
+        <Route path="/profile/service/new" element={<ServiceForm />} />
         <Route path="/booking" element={<GetBooking />} />
         <Route path="/booking/add" element={<AddBooking />} /> 
         <Route path="/booking/update" element={<UpdateBooking />} />

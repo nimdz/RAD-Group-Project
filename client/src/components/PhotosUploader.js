@@ -57,10 +57,11 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
           value={photoLink}
           onChange={(e) => setPhotoLink(e.target.value)}
           placeholder={"Add using a link ....jpg"}
+          className="w-full border rounded-md py-1 pl-2"
         />
         <button
           onClick={addPhotoByLink}
-          className="bg-gray-200 grow px-4 rounded-2xl"
+          className="bg-gray-200 grow px-4 rounded-md"
         >
           Add&nbsp;Photo
         </button>
