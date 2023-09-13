@@ -2,7 +2,10 @@ import ContactUsBG from "../assets/images/contactusbg.png";
 
 export default function ContactUs() {
   return (
-    <div className="w-full justify-start my-10 px-[50px] lg:px-[100px] grid grid-cols-[3fr_2fr]">
+    <div
+      className="w-full justify-start my-10 px-[50px] lg:px-[100px] grid grid-cols-[3fr_2fr]"
+      id="contact-us"
+    >
       <div className="flex items-center">
         <img src={ContactUsBG} alt="backgroundimage" />
       </div>

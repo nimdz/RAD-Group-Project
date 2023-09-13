@@ -34,9 +34,11 @@ export default function ProfileNavBar() {
                 My Bookings
               </Link>
             </div>
-            <div className="ml-2  pr-2">
-          <div className="border-r pr-2">
-              <Link className="flex items-center text-sm font-semibold" to="/booking/add">
+            <div className="border-r pr-2">
+              <Link
+                className="flex items-center text-sm font-semibold"
+                to="/booking/add"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -55,7 +57,10 @@ export default function ProfileNavBar() {
               </Link>
             </div>
             <div className="border-r pr-2">
-              <Link className="flex items-center text-sm font-semibold" to="/booking/update">
+              <Link
+                className="flex items-center text-sm font-semibold"
+                to="/booking/update"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -74,7 +79,10 @@ export default function ProfileNavBar() {
               </Link>
             </div>
             <div className="border-r pr-2">
-              <Link className="flex items-center text-sm font-semibold" to="/booking/delete">
+              <Link
+                className="flex items-center text-sm font-semibold"
+                to="/booking/delete"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
