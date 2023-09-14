@@ -591,6 +591,31 @@ app.get("/booking", verifyToken, async (req, res) => {
   }
 });
 
+app.get("/booking/:bookingId", verifyToken, async (req, res) => {
+  try {
+    // Extract userId from the req.user object
+    const userId = req.user.userId; // Assuming userId is stored in the JWT payload
+
+    // Get the bookingId from the URL parameters
+    const bookingId = req.params.bookingId;
+
+    // Find the booking by ID and ensure it belongs to the authenticated user
+    const booking = await Booking.findOne({
+      _id: bookingId,
+      userId: userId, // Ensure that the booking belongs to the authenticated user
+    });
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found." });
+    }
+
+    res.status(200).json({ booking });
+  } catch (error) {
+    console.error("Error fetching booking:", error);
+    res.status(500).json({ error: "An error occurred while fetching the booking." });
+  }
+});
+
 app.get("/hotels/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -663,6 +688,9 @@ app.get("/api-review/:email", async (req, res) => {
       .json({ error: "An error occurred while fetching user data." });
   }
 });
+
+// Retrieve a specific booking by ID
+
 
 app.delete("/api-review/:title", async (req, res) => {
   try {
