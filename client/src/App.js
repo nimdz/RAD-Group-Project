@@ -49,7 +49,7 @@ function App() {
         <Route path="/profile/service/new" element={<ServiceForm />} />
         <Route path="/booking" element={<GetBooking />} />
         <Route path="/booking/add" element={<AddBooking />} />
-        <Route path="/booking/update" element={<UpdateBooking />} />
+        <Route path="/booking/update/:bookingId" element={<UpdateBooking />} />
         <Route path="/hotel" element={<HotelPage />} />
         <Route path="/hotel/:id" element={<HotelBookingPage />} />
       </Routes>
