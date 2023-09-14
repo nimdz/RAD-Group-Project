@@ -16,6 +16,7 @@ const User = require("./models/user");
 const Accommodation = require("./models/accommodation");
 const Service = require("./models/service");
 const Booking = require("./models/bookings");
+const Review = require("./models/review");
 
 const jwtSecret = process.env.JWT_SECRET_KEY;
 
@@ -594,15 +595,89 @@ app.get("/hotels/:id", async (req, res) => {
   const id = req.params.id;
 
   const hotel = await Accommodation.findById(id);
-  console.log("Hotel:", hotel);
   res.json(hotel);
 });
 
-// app.get("/hotels", async (req, res) => {
-//   const userData = await getUserDataFromReq(req);
+app.post("/review", async (req, res) => {
+  try {
+    const { reviewDetails } = req.body;
 
-//   res.json(await Accommodation.find({ user: userData.id }).populate("place"));
-// });
+    const email = reviewDetails.email;
+
+    const user = await User.findOne({ email }); // Find the user by email
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    await Review.create({
+      email: user.email,
+      title: reviewDetails.title,
+      description: reviewDetails.description,
+    });
+
+    res.status(201).json({ message: "Accommodation added successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding accommodation." });
+  }
+});
+
+app.put("/api-review/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Get the service title from the request parameters
+    const { title, description } = req.body; // Get updated service details from the request body
+
+    const review = await Review.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+      },
+      { new: true } // To return the updated booking
+    );
+
+    if (!review) {
+      return res.status(404).json({ error: "Service not found." });
+    }
+
+    res.status(200).json({ message: "Service updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the service." });
+  }
+});
+
+app.get("/api-review/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const review = await Review.find({ email }, "title description userType");
+    res.status(200).json(review);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+app.delete("/api-review/:title", async (req, res) => {
+  try {
+    const title = req.params.title;
+    await Review.findOneAndDelete({ title }); // Find and delete user by email
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while deleting user." });
+  }
+});
+
+app.get("/review", async (req, res) => {
+  const reviews = await Review.find();
+  res.json(reviews);
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

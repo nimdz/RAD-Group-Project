@@ -18,6 +18,7 @@ import AddBooking from "./pages/AddBooking";
 import UpdateBooking from "./pages/UpdateBooking";
 import HotelPage from "./pages/HotelPage";
 import HotelBookingPage from "./pages/HotelBookingPage";
+import Review from "./components/Review";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
@@ -34,6 +35,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/users" element={<Users />} />
         <Route path="/profile/account" element={<Profile />} />
+        <Route path="/profile/review" element={<Review />} />
         <Route path="/profile/accommodation" element={<Accommodation />} />
         <Route
           path="/profile/accommodation/new"

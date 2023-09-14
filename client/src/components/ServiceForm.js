@@ -7,7 +7,7 @@ import NavBar from "./NavBar";
 import BG from "../assets/images/profilebg.jpg";
 import { UserContext } from "./UserContext";
 
-export default function NewAccommodationForm() {
+export default function ServiceForm() {
   // const { id } = useParams();
   const { user } = useContext(UserContext);
   // const [email, setEmail] = useState("");
