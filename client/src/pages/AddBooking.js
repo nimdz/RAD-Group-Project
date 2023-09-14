@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
 export default function AddBooking() {
   const [place, setPlace] = useState("");
   const [checkIn, setCheckIn] = useState("");
@@ -50,105 +49,95 @@ export default function AddBooking() {
   }
   return (
     <div className="container">
-    <form onSubmit={sendData}>
-      <div className="form-group">
-      <h1 className="text-[32px] font-semibold text-center">Add Booking</h1>
-        <label htmlFor="place">Place</label>
-        <input
-          type="text"
-          className={`border w-full rounded-md shadow-sm 
-          shadow-gray-500 py-2 pl-2 mt-6 text-sm  
+      <form onSubmit={sendData}>
+        <div className="form-group">
+          <h1 className="text-[24px] font-semibold text-center mb-[20px]">
+            Add Booking
+          </h1>
+          <label htmlFor="place" className="text-sm font-semibold">
+            Place
+          </label>
+          <input
+            type="text"
+            className={`border w-full rounded-md shadow-sm 
+          shadow-gray-500 py-2 pl-2 mb-[10px] text-sm  
             }`}
-          id="place"
-          placeholder="Enter Place Name"
-          value={place}
-          onChange={(e) => setPlace(e.target.value)}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="checkIn">Check-In</label>
-        <input
-          type="date"
-          className={`border w-full rounded-md 
-           shadow-sm shadow-gray-500 py-2 pl-2 mt-6 text-sm 
+            id="place"
+            placeholder="Enter Place Name"
+            value={place}
+            onChange={(e) => setPlace(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="checkIn" className="text-sm font-semibold">
+            Check-In
+          </label>
+          <input
+            type="date"
+            className={`border w-full rounded-md 
+           shadow-sm shadow-gray-500 py-2 pl-2 mb-[10px] text-sm 
             }`}
-          id="checkIn"
-          value={checkIn}
-          onChange={(e) => setCheckIn(e.target.value)}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="checkOut">Check-Out</label>
-        <input
-          type="date"
-          className={`border w-full rounded-md 
-          shadow-sm shadow-gray-500 py-2 pl-2 mt-6 text-sm 
+            id="checkIn"
+            value={checkIn}
+            onChange={(e) => setCheckIn(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="checkOut" className="text-sm font-semibold">
+            Check-Out
+          </label>
+          <input
+            type="date"
+            className={`border w-full rounded-md 
+          shadow-sm shadow-gray-500 py-2 pl-2 mb-[10px] text-sm 
             }`}
-          id="checkOut"
-          value={checkOut}
-          onChange={(e) => setCheckOut(e.target.value)}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="noofPeople">Number of People</label>
-        <input
-          type="number"
-          className={`border w-full rounded-md shadow-sm shadow-gray-500 
-          py-2 pl-2 mt-6 text-sm 
+            id="checkOut"
+            value={checkOut}
+            onChange={(e) => setCheckOut(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="noofPeople" className="text-sm font-semibold">
+            Number of People
+          </label>
+          <input
+            type="number"
+            className={`border w-full rounded-md shadow-sm shadow-gray-500 
+          py-2 pl-2 mb-[10px] text-sm 
             }`}
-          id="noofPeople"
-          placeholder="Enter Number of People"
-          value={noofPeople}
-          onChange={(e) => setNoofPeople(e.target.value)}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="phoneNo">Phone Number</label>
-        <input
-          type="tel"
-          className={`border w-full
-           rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-6 text-sm
+            id="noofPeople"
+            placeholder="Enter Number of People"
+            value={noofPeople}
+            onChange={(e) => setNoofPeople(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="phoneNo" className="text-sm font-semibold">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            className={`border w-full
+           rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mb-[10px] text-sm
             }`}
-          id="phoneNo"
-          placeholder="Enter Phone Number"
-          value={phoneNo}
-          onChange={(e) => setPhoneNo(e.target.value)}
-          required
-        />
-      </div>
-      <button 
-        type="submit"
-        className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
+            id="phoneNo"
+            placeholder="Enter Phone Number"
+            value={phoneNo}
+            onChange={(e) => setPhoneNo(e.target.value)}
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-secondary_500 text-white font-semibold w-full rounded-md shadow-sm shadow-gray-500 py-2 pl-2 mt-4 text-sm"
         >
-        Create Booking
-      </button>
-      <Link
-            to="/profile"
-            className="absolute right-0 bottom-0 mr-20 mb-20 text-sm flex items-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-3 h-3 mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-              />
-            </svg>
-            Back to Profile Page
-            </Link>
+          Create Booking
+        </button>
       </form>
-      </div>
+    </div>
   );
 }
-
-

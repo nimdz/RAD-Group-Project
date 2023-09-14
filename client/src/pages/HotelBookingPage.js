@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import BookingWidget from "../components/BookingWidget";
 import AddressLink from "../components/AddressLink";
 import NavBar from "../components/NavBar";
 import BG from "../assets/images/profilebg.jpg";
 import CheckOutBar from "../components/CheckOutBar";
 import ReviewForm from "../components/ReviewForm";
 import Footer from "../components/Footer";
+import AddBooking from "./AddBooking";
 
 export default function HotelBookingPage() {
   const { id } = useParams();
@@ -68,7 +68,7 @@ export default function HotelBookingPage() {
               <br />
             </div>
             <div>
-              <BookingWidget place={hotel} />
+              <AddBooking />
             </div>
           </div>
           <div className="bg-white  px-8 py-8 border-t ">

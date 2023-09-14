@@ -571,10 +571,8 @@ app.get("/booking", verifyToken, async (req, res) => {
   try {
     // Extract userId from the req.user object
     const userId = req.user.userId; // Assuming userId is stored in the JWT payload
-    console.log("UserID:", userId); // Log the userId to see if it's correct
 
     const bookings = await Booking.find({ userId });
-    console.log("Bookings:", bookings); // Log the retrieved bookings
 
     if (!bookings) {
       return res
@@ -612,7 +610,9 @@ app.get("/booking/:bookingId", verifyToken, async (req, res) => {
     res.status(200).json({ booking });
   } catch (error) {
     console.error("Error fetching booking:", error);
-    res.status(500).json({ error: "An error occurred while fetching the booking." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the booking." });
   }
 });
 
@@ -690,7 +690,6 @@ app.get("/api-review/:email", async (req, res) => {
 });
 
 // Retrieve a specific booking by ID
-
 
 app.delete("/api-review/:title", async (req, res) => {
   try {
