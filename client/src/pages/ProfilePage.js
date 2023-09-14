@@ -4,6 +4,7 @@ import Users from "../components/Users";
 import Profile from "../components/Profile";
 import Accommodation from "../components/Accommodation";
 import AdminAccommodation from "../components/AdminAccommodation";
+import Review from "../components/Review";
 
 export default function ProfilePage() {
   let { subpage } = useParams();
@@ -17,6 +18,7 @@ export default function ProfilePage() {
         {subpage === "users" && <Users />}
         {subpage === "accommodation" && <Accommodation />}
         {subpage === "admin_accommodation" && <AdminAccommodation />}
+        {subpage === "review" && <Review />}
       </div>
     </div>
   );

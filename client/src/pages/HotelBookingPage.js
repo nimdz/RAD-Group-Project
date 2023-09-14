@@ -6,6 +6,8 @@ import AddressLink from "../components/AddressLink";
 import NavBar from "../components/NavBar";
 import BG from "../assets/images/profilebg.jpg";
 import CheckOutBar from "../components/CheckOutBar";
+import ReviewForm from "../components/ReviewForm";
+import Footer from "../components/Footer";
 
 export default function HotelBookingPage() {
   const { id } = useParams();
@@ -77,6 +79,8 @@ export default function HotelBookingPage() {
           </div>
         </div>
       </div>
+      <ReviewForm />
+      <Footer />
     </div>
   );
 }

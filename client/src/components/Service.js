@@ -33,7 +33,6 @@ export default function Service() {
 
   const handleUpdate = async (updatedService) => {
     try {
-      console.log("id: " + updatedService._id);
       await axios.put(`/api-service/${updatedService._id}`, updatedService);
       fetchUserData();
       setEditingService(null); // Clear the editing state after successful update
