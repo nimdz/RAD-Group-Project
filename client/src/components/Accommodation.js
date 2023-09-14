@@ -40,7 +40,7 @@ export default function Accommodation() {
         updatedAccommodation
       );
       fetchUserData();
-      setEditingService(null); // Clear the editing state after successful update
+      setEditingService(null); 
     } catch (error) {
       console.error("Error updating service:", error);
     }
@@ -84,8 +84,8 @@ export default function Accommodation() {
       <AccommodationTable
         data={userData}
         onDelete={handleDelete}
-        onUpdate={handleUpdate} // Pass the handleUpdate function to ServiceTable
-        setEditingService={setEditingService} // Pass a state updater for editing
+        onUpdate={handleUpdate} 
+        setEditingService={setEditingService} 
         editingService={editingService}
       />
       <Footer />

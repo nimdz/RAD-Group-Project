@@ -1,11 +1,11 @@
 import Logo from "../assets/Logo_1.png";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext"; // Import UserContext
+import { UserContext } from "./UserContext";
 
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user, setUser } = useContext(UserContext); // Get the user object from the context
+  const { user, setUser } = useContext(UserContext); 
 
   const navigate = useNavigate();
 

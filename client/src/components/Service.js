@@ -35,7 +35,7 @@ export default function Service() {
     try {
       await axios.put(`/api-service/${updatedService._id}`, updatedService);
       fetchUserData();
-      setEditingService(null); // Clear the editing state after successful update
+      setEditingService(null); 
     } catch (error) {
       console.error("Error updating service:", error);
     }
@@ -79,9 +79,9 @@ export default function Service() {
       <ServiceTable
         data={userData}
         onDelete={handleDelete}
-        onUpdate={handleUpdate} // Pass the handleUpdate function to ServiceTable
-        setEditingService={setEditingService} // Pass a state updater for editing
-        editingService={editingService} // Pass the currently editing service
+        onUpdate={handleUpdate}
+        setEditingService={setEditingService} 
+        editingService={editingService}
       />
       <Footer />
     </>

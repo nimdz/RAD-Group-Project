@@ -33,7 +33,7 @@ const ReviewTable = ({
     <div className="flex justify-center my-10">
       <div className="flex overflow-x-auto w-4/5 lg:w-2/5">
         <table className="min-w-full border">
-          {/* ... (Table header) */}
+          {}
           <tbody className="bg-white divide-y divide-gray-200">
             {data.map((item, index) => (
               <tr key={index}>

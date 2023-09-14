@@ -25,7 +25,6 @@ export default function ReviewForm() {
   }
 
   useEffect(() => {
-    // Fetch reviews from the server when the component mounts
     axios.get("/review").then((response) => {
       setReviews(response.data);
     });

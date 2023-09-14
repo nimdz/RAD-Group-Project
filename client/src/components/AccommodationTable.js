@@ -7,33 +7,21 @@ const ServiceTable = ({
   editingService,
   setEditingService,
 }) => {
-  const [editedService, setEditedService] = useState({}); // Store the edited service data
-
+  const [editedService, setEditedService] = useState({}); 
   const handleEdit = (index) => {
-    // Set the editingService state to the service being edited
     setEditingService(data[index]);
 
-    // Optionally, you can set the editedService state to the same data
-    // to initialize the form fields with the current service data
     setEditedService(data[index]);
   };
 
   const handleSave = () => {
-    // Call the onUpdate function to update the service with the edited data
     onUpdate(editedService);
-
-    // Clear the editingService state to exit the editing mode
     setEditingService(null);
-
-    // Clear the editedService state
     setEditedService({});
   };
 
   const handleCancel = () => {
-    // Clear the editingService state to exit the editing mode
     setEditingService(null);
-
-    // Clear the editedService state
     setEditedService({});
   };
 

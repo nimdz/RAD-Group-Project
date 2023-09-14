@@ -34,7 +34,7 @@ export default function Review() {
     try {
       await axios.put(`/api-review/${updatedReview._id}`, updatedReview);
       fetchUserData();
-      setEditingReview(null); // Clear the editing state after successful update
+      setEditingReview(null); 
     } catch (error) {
       console.error("Error updating service:", error);
     }
