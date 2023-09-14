@@ -8,8 +8,7 @@ import axios from "axios";
 
 export default function HomeSlider() {
   const [slides, setSlides] = useState([]);
-  const [slidesToShow, setSlidesToShow] = useState(5); // Initial slidesToShow value
-
+  const [slidesToShow, setSlidesToShow] = useState(5); 
   const defaultURL = "http://localhost:4000/";
 
   useEffect(() => {
@@ -18,7 +17,6 @@ export default function HomeSlider() {
     });
   }, []);
 
-  // Define a function to update slidesToShow based on screen width
   const updateSlidesToShow = () => {
     if (window.innerWidth >= 1600) {
       setSlidesToShow(5);
@@ -34,31 +32,26 @@ export default function HomeSlider() {
   };
 
   useEffect(() => {
-    // Call the updateSlidesToShow function when the component mounts
     updateSlidesToShow();
-
-    // Add a resize event listener to update slidesToShow on window resize
     window.addEventListener("resize", updateSlidesToShow);
-
-    // Clean up the event listener when the component unmounts
     return () => {
       window.removeEventListener("resize", updateSlidesToShow);
     };
   }, []);
 
   const CustomPrevArrow = () => {
-    return <></>; // Return an empty fragment to disable the previous button
+    return <></>; 
   };
 
   const CustomNextArrow = () => {
-    return <></>; // Return an empty fragment to disable the next button
+    return <></>; 
   };
 
   const settings = {
     dots: true,
     infinite: true,
     speed: 1000,
-    slidesToShow: slidesToShow, // Use the dynamic value
+    slidesToShow: slidesToShow, 
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
@@ -73,8 +66,12 @@ export default function HomeSlider() {
       <Slider {...settings}>
         {slides.length > 0 &&
           slides.map((slide) => (
-            <Link key={slide} className="flex mt-3 rounded-lg">
-              <div className="flex-col mx-1 bg-white rounded-lg h-[300px]">
+            <Link
+              key={slide._id}
+              className="flex mt-3 rounded-lg"
+              to={`/hotel/${slide._id}`}
+            >
+              <div className="flex-col mx-1 bg-gray-100 rounded-lg h-[300px]">
                 {slide.photos.length > 0 && (
                   <div className="h-[190px]">
                     <img

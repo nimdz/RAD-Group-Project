@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "./UserContext";
 import ProfileNavBar from "./ProfileNavBar";
 import BG from "../assets/images/profilebg.jpg";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { useEffect, useState, useContext } from "react";
-import { UserContext } from "./UserContext";
 import ServiceTable from "./ServiceTable";
 
 export default function Service() {
   const [userData, setUserData] = useState([]);
+  const [editingService, setEditingService] = useState(null);
   const { user } = useContext(UserContext);
 
   const fetchUserData = async () => {
@@ -27,7 +27,17 @@ export default function Service() {
       await axios.delete(`/api-service/${userData[index].title}`);
       fetchUserData();
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error deleting service:", error);
+    }
+  };
+
+  const handleUpdate = async (updatedService) => {
+    try {
+      await axios.put(`/api-service/${updatedService._id}`, updatedService);
+      fetchUserData();
+      setEditingService(null); 
+    } catch (error) {
+      console.error("Error updating service:", error);
     }
   };
 
@@ -66,7 +76,13 @@ export default function Service() {
           Add new Facility
         </Link>
       </div>
-      <ServiceTable data={userData} onDelete={handleDelete} />
+      <ServiceTable
+        data={userData}
+        onDelete={handleDelete}
+        onUpdate={handleUpdate}
+        setEditingService={setEditingService} 
+        editingService={editingService}
+      />
       <Footer />
     </>
   );

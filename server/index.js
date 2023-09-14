@@ -15,7 +15,8 @@ const port = process.env.PORT || 4000;
 const User = require("./models/user");
 const Accommodation = require("./models/accommodation");
 const Service = require("./models/service");
-const Booking=require("./models/bookings");;
+const Booking = require("./models/bookings");
+const Review = require("./models/review");
 
 const jwtSecret = process.env.JWT_SECRET_KEY;
 
@@ -56,13 +57,12 @@ app.get("/test", (req, res) => {
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader) {
     return res.status(401).json({ message: "Unauthorized: Missing token" });
   }
-  const token = req.headers.authorization.split(' ')[1];
+  const token = req.headers.authorization.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: Missing token" });
@@ -287,48 +287,39 @@ app.post("/accommodations", async (req, res) => {
   }
 });
 
-// // Route for updating an existing accommodation
-// app.put("/accommodations/:id", async (req, res) => {
-//   try {
-//     const { placeDetails } = req.body; // Extract updated accommodation data
+app.put("/api-accommodation/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Get the service title from the request parameters
+    const { title, address } = req.body; // Get updated service details from the request body
 
-//     // Find the accommodation by its ID
-//     const accommodation = await Accommodation.findById(req.params.id);
+    const service = await Accommodation.findByIdAndUpdate(
+      id,
+      {
+        title,
+        address,
+      },
+      { new: true } // To return the updated booking
+    );
 
-//     if (!accommodation) {
-//       return res.status(404).json({ error: "Accommodation not found." });
-//     }
+    if (!service) {
+      return res.status(404).json({ error: "Service not found." });
+    }
 
-//     // You can update specific fields here based on the data in placeDetails
-//     accommodation.title = placeDetails.title;
-//     accommodation.address = placeDetails.address;
-//     accommodation.photos = placeDetails.addedPhotos;
-//     accommodation.description = placeDetails.description;
-//     accommodation.perks = placeDetails.perks;
-//     accommodation.extraInfo = placeDetails.extraInfo;
-//     accommodation.checkIn = placeDetails.checkIn;
-//     accommodation.checkOut = placeDetails.checkOut;
-//     accommodation.maxGuests = placeDetails.maxGuests;
-//     accommodation.price = placeDetails.price;
-
-//     // Save the updated accommodation
-//     await accommodation.save();
-
-//     res.status(200).json({ message: "Accommodation updated successfully." });
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while updating accommodation." });
-//   }
-// });
+    res.status(200).json({ message: "Service updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the service." });
+  }
+});
 
 app.get("/api-accommodation/:email", async (req, res) => {
   try {
     const email = req.params.email;
     const accommodations = await Accommodation.find(
       { email },
-      "title address userType"
+      "title address description userType"
     ); // Modify this to fetch the desired fields
 
     res.status(200).json(accommodations);
@@ -386,8 +377,6 @@ app.delete("/admin-accommodation/:title", async (req, res) => {
   }
 });
 
-// ... (Rest of your code)
-
 app.get("/user-places", async (req, res) => {
   const { token } = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -435,6 +424,33 @@ app.post("/service", async (req, res) => {
   }
 });
 
+app.put("/api-service/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Get the service title from the request parameters
+    const { title, description } = req.body; // Get updated service details from the request body
+
+    const service = await Service.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+      },
+      { new: true } // To return the updated booking
+    );
+
+    if (!service) {
+      return res.status(404).json({ error: "Service not found." });
+    }
+
+    res.status(200).json({ message: "Service updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the service." });
+  }
+});
+
 app.get("/api-service/:email", async (req, res) => {
   try {
     const email = req.params.email;
@@ -464,7 +480,7 @@ app.get("/service", async (req, res) => {
 // Routes that require JWT authentication
 app.post("/booking/add", verifyToken, (req, res) => {
   const { place, checkIn, checkOut, noofPeople, phoneNo } = req.body;
-  
+
   // Extract userId from the req.user object
   const userId = req.user.userId; // Assuming userId is stored in the JWT payload
 
@@ -495,7 +511,7 @@ app.put("/booking/update/:bookingId", verifyToken, async (req, res) => {
   try {
     const { place, checkIn, checkOut, noofPeople, phoneNo } = req.body;
     const bookingId = req.params.bookingId;
-    
+
     // Extract userId from the req.user object
     const userId = req.user.userId; // Assuming userId is stored in the JWT payload
 
@@ -516,16 +532,21 @@ app.put("/booking/update/:bookingId", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Booking not found." });
     }
 
-    res.status(200).json({ message: "Booking updated successfully.", booking: updatedBooking });
+    res.status(200).json({
+      message: "Booking updated successfully.",
+      booking: updatedBooking,
+    });
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while updating the booking." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the booking." });
   }
 });
 // Delete an existing booking
 app.delete("/booking/delete/:bookingId", verifyToken, async (req, res) => {
   try {
     const bookingId = req.params.bookingId;
-    
+
     // Extract userId from the req.user object
     const userId = req.user.userId; // Assuming userId is stored in the JWT payload
 
@@ -540,7 +561,9 @@ app.delete("/booking/delete/:bookingId", verifyToken, async (req, res) => {
 
     res.status(200).json({ message: "Booking deleted successfully." });
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while deleting the booking." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the booking." });
   }
 });
 // Retrieve bookings for a specific user
@@ -554,17 +577,20 @@ app.get("/booking", verifyToken, async (req, res) => {
     console.log("Bookings:", bookings); // Log the retrieved bookings
 
     if (!bookings) {
-      return res.status(404).json({ message: "No bookings found for this user." });
+      return res
+        .status(404)
+        .json({ message: "No bookings found for this user." });
     }
 
     res.status(200).json({ bookings });
   } catch (error) {
     console.error("Error fetching bookings:", error);
-    res.status(500).json({ error: "An error occurred while fetching bookings." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching bookings." });
   }
 });
 
-// Retrieve a specific booking by ID
 app.get("/booking/:bookingId", verifyToken, async (req, res) => {
   try {
     // Extract userId from the req.user object
@@ -588,6 +614,97 @@ app.get("/booking/:bookingId", verifyToken, async (req, res) => {
     console.error("Error fetching booking:", error);
     res.status(500).json({ error: "An error occurred while fetching the booking." });
   }
+});
+
+app.get("/hotels/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const hotel = await Accommodation.findById(id);
+  res.json(hotel);
+});
+
+app.post("/review", async (req, res) => {
+  try {
+    const { reviewDetails } = req.body;
+
+    const email = reviewDetails.email;
+
+    const user = await User.findOne({ email }); // Find the user by email
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    await Review.create({
+      email: user.email,
+      title: reviewDetails.title,
+      description: reviewDetails.description,
+    });
+
+    res.status(201).json({ message: "Accommodation added successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding accommodation." });
+  }
+});
+
+app.put("/api-review/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Get the service title from the request parameters
+    const { title, description } = req.body; // Get updated service details from the request body
+
+    const review = await Review.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+      },
+      { new: true } // To return the updated booking
+    );
+
+    if (!review) {
+      return res.status(404).json({ error: "Service not found." });
+    }
+
+    res.status(200).json({ message: "Service updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the service." });
+  }
+});
+
+app.get("/api-review/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const review = await Review.find({ email }, "title description userType");
+    res.status(200).json(review);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching user data." });
+  }
+});
+
+// Retrieve a specific booking by ID
+
+
+app.delete("/api-review/:title", async (req, res) => {
+  try {
+    const title = req.params.title;
+    await Review.findOneAndDelete({ title }); // Find and delete user by email
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while deleting user." });
+  }
+});
+
+app.get("/review", async (req, res) => {
+  const reviews = await Review.find();
+  res.json(reviews);
 });
 
 app.listen(port, () => {

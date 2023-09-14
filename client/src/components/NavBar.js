@@ -1,11 +1,11 @@
 import Logo from "../assets/Logo_1.png";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext"; // Import UserContext
+import { UserContext } from "./UserContext";
 
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user, setUser } = useContext(UserContext); // Get the user object from the context
+  const { user, setUser } = useContext(UserContext); 
 
   const navigate = useNavigate();
 
@@ -43,9 +43,15 @@ export default function NavBar() {
         <Link className="mr-4 2xl:mr-8 text-white" to="/">
           Home
         </Link>
-        <Link className="mr-4 2xl:mr-8 text-white">Hotels</Link>
-        <Link className="mr-4 2xl:mr-8 text-white">Services</Link>
-        <Link className="mr-4 2xl:mr-8 text-white">Contact Us</Link>
+        <Link className="mr-4 2xl:mr-8 text-white" to="/hotel">
+          Hotels
+        </Link>
+        <a className="mr-4 2xl:mr-8 text-white" href="./#services-section">
+          Services
+        </a>
+        <a className="mr-4 2xl:mr-8 text-white" href="./#contact-us">
+          Contact Us
+        </a>
       </div>
       <div>
         {user ? (

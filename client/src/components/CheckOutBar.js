@@ -4,7 +4,7 @@ export default function CheckOutBar() {
       <form className="w-6/7 bg-white max-w-[800px] rounded-full shadow-md">
         <div className="flex justify-between ml-10 mr-5 my-5">
           <div className="border-r">
-            {/* i need to add border only in right */}
+            {}
             <label className="text-sm font-semibold">Location</label>
             <input
               type="text"
