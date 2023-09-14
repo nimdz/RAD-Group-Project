@@ -16,7 +16,7 @@ export default function ProfileNavBar() {
         <form className="w-6/7 bg-white max-w-[800px] rounded-full shadow-md">
           <div className="flex justify-between ml-10 mr-5 my-5">
             <div className="border-r pr-2">
-              <Link className="flex items-center text-sm font-semibold">
+              <Link className="flex items-center text-sm font-semibold"  to="/booking">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
