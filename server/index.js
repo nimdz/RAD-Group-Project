@@ -590,6 +590,20 @@ app.get("/booking", verifyToken, async (req, res) => {
   }
 });
 
+app.get("/hotels/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const hotel = await Accommodation.findById(id);
+  console.log("Hotel:", hotel);
+  res.json(hotel);
+});
+
+// app.get("/hotels", async (req, res) => {
+//   const userData = await getUserDataFromReq(req);
+
+//   res.json(await Accommodation.find({ user: userData.id }).populate("place"));
+// });
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

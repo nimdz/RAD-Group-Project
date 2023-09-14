@@ -32,12 +32,12 @@ export default function Accommodation() {
     }
   };
 
-  const handleUpdate = async (updatedService) => {
+  const handleUpdate = async (updatedAccommodation) => {
     try {
-      console.log("id: " + updatedService._id);
+      console.log("id: " + updatedAccommodation._id);
       await axios.put(
-        `/api-accommodation/${updatedService._id}`,
-        updatedService
+        `/api-accommodation/${updatedAccommodation._id}`,
+        updatedAccommodation
       );
       fetchUserData();
       setEditingService(null); // Clear the editing state after successful update

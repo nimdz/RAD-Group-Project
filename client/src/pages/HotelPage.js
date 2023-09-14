@@ -32,6 +32,7 @@ export default function HotelPage() {
             <Link
               key={hotel}
               className="flex justify-center rounded-lg w-[260px] mb-[30px]"
+              to={`/hotel/${hotel._id}`}
             >
               <div className="flex-col bg-gray-100 rounded-lg h-[300px] w-[250px]">
                 {hotel.photos.length > 0 && (
