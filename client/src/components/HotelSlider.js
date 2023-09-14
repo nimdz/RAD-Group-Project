@@ -73,8 +73,12 @@ export default function HomeSlider() {
       <Slider {...settings}>
         {slides.length > 0 &&
           slides.map((slide) => (
-            <Link key={slide} className="flex mt-3 rounded-lg">
-              <div className="flex-col mx-1 bg-white rounded-lg h-[300px]">
+            <Link
+              key={slide._id}
+              className="flex mt-3 rounded-lg"
+              to={`/hotel/${slide._id}`}
+            >
+              <div className="flex-col mx-1 bg-gray-100 rounded-lg h-[300px]">
                 {slide.photos.length > 0 && (
                   <div className="h-[190px]">
                     <img

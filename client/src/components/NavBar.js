@@ -43,9 +43,15 @@ export default function NavBar() {
         <Link className="mr-4 2xl:mr-8 text-white" to="/">
           Home
         </Link>
-        <Link className="mr-4 2xl:mr-8 text-white">Hotels</Link>
-        <Link className="mr-4 2xl:mr-8 text-white">Services</Link>
-        <Link className="mr-4 2xl:mr-8 text-white">Contact Us</Link>
+        <Link className="mr-4 2xl:mr-8 text-white" to="/hotel">
+          Hotels
+        </Link>
+        <a className="mr-4 2xl:mr-8 text-white" href="./#services-section">
+          Services
+        </a>
+        <a className="mr-4 2xl:mr-8 text-white" href="./#contact-us">
+          Contact Us
+        </a>
       </div>
       <div>
         {user ? (
