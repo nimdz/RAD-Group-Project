@@ -12,6 +12,7 @@ export function UserContextProvider({ children }) {
     if (!user) {
       axios.get("/").then(({ data }) => {
         setUser(data);
+        console.log("User Details: " + data);
         //setReady(true);
       });
     }
